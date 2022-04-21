@@ -1,0 +1,36 @@
+[
+    {
+        "uid": 0,
+        "email": "asdfg@njh.nbv",
+        "profile": {
+            "uname": "bigdaddy",
+            "dob": "2012-04-23T18:25:43.511Z",
+            "photoURL": "../../assets/img/photo.jpg"
+        },
+        "posts": [0,1],
+        "followers": [1],
+        "followees": [1]
+    },
+    {
+        "uid": 1,
+        "email": "suckmyass@fingering.xxx",
+        "profile": {
+            "uname": "bustybabe",
+            "dob": "2018-07-23T21:25:43.511Z"
+        },
+        "posts": [2,3],
+        "followers": [0,2],
+        "followees": [0]
+    },
+    {
+        "uid": 2,
+        "email": "ramachari@aparichitudu.com",
+        "profile": {
+            "uname": "remosucksramamrocks",
+            "dob": "2004-07-23T04:25:43.511Z"
+        },
+        "posts": [4,5],
+        "followers": [0,1],
+        "followees": [0,1]
+    }
+]

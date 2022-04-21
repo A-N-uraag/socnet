@@ -1,0 +1,98 @@
+[
+    {
+        "pid": 0,
+        "createdDate": "2021-05-17T09:31:43.511Z",
+        "content": "My first post, lol!",
+        "likes": 0,
+        "reposts": 0,
+        "noOfReports": 0,
+        "comments": [
+            {
+                "uid": 1,
+                "comment": "Haha"
+            }
+        ]
+    },
+    {
+        "pid": 1,
+        "createdDate": "2021-06-17T09:31:43.511Z",
+        "content": "My second post, lol!",
+        "likes": 0,
+        "reposts": 0,
+        "noOfReports": 0,
+        "comments": [
+            {
+                "uid": 1,
+                "comment": "Second Haha"
+            }
+        ]
+    },
+    {
+        "pid": 2,
+        "createdDate": "2021-05-01T15:51:42.511Z",
+        "content": "Hey baby, wanna come over?",
+        "likes": 0,
+        "reposts": 0,
+        "noOfReports": 0,
+        "comments": [
+            {
+                "uid": 1,
+                "comment": "Noice"
+            },
+            {
+                "uid": 2,
+                "comment": "అపచారం అపచారం, అమంగళం ప్రతిహతమౌగాక"
+            }
+        ]
+    },
+    {
+        "pid": 3,
+        "createdDate": "2021-06-01T15:51:42.511Z",
+        "content": "Wanna grab'em",
+        "likes": 0,
+        "reposts": 0,
+        "noOfReports": 0,
+        "comments": [
+            {
+                "uid": 2,
+                "comment": "నేను రామాన్ని, కామాన్ని కాదు"
+            },
+            {
+                "uid": 1,
+                "comment": "Oh Ya"
+            }
+        ]
+    },
+    {
+        "pid": 4,
+        "createdDate": "2021-06-01T15:51:42.511Z",
+        "content": "Hello World",
+        "likes": 0,
+        "reposts": 0,
+        "noOfReports": 0,
+        "comments": [
+            {
+                "uid": 0,
+                "comment": "Sup my man"
+            }
+        ]
+    },
+    {
+        "pid": 5,
+        "createdDate": "2021-06-01T15:51:42.511Z",
+        "content": "Elon Musk",
+        "likes": 0,
+        "reposts": 0,
+        "noOfReports": 0,
+        "comments": [
+            {
+                "uid": 1,
+                "comment": "Yummy"
+            },
+            {
+                "uid": 0,
+                "comment": "dude"
+            }
+        ]
+    }
+]
