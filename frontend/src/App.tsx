@@ -1,10 +1,13 @@
-import Homepage from "./components/Homepage/HomepageComponent";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React from 'react';
+import './App.css';
+import AppRouter from './router';
 
-function App() {
-  return (
-    <Homepage uid={2}></Homepage>
-  );
+class App extends React.Component {
+  render() {
+    return (
+      <AppRouter/>
+    );
+  }
 }
 
 export default App;
