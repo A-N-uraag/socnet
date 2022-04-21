@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Card, Container, Row, Col, Form, Nav, Image, Button } from "react-bootstrap";
 import Post from "../Post/Posts";
-import "./HomepageComponent.css"
 
 let userData = require("../../assets/data/users.json");
 let postData = require("../../assets/data/posts.json");

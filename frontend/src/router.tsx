@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/loginPage/login";
-import HomePage from "./components/homeDummy/homeDummy";
+import HomePage from "./components/homepage/homePage";
 import CreateProfile from "./components/createProfile/createProfile";
 
 import { RequireAuth } from "./requireAuth";
@@ -18,7 +18,7 @@ class AppRouter extends React.Component {
                     } />
                     <Route path="home" element={
                         <RequireAuth>
-                            <HomePage />
+                            <HomePage uid={2}/>
                         </RequireAuth>
                     } />
                 </Routes>
