@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
-    <Homepage uid={0}></Homepage>
+    <Homepage uid={2}></Homepage>
   );
 }
 
