@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
     "@testing-library/jest-dom": "^5.16.4",
@@ -25,7 +26,15 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-spinners": "^0.11.0",
+    "react-tsparticles": "^2.0.6",
     "redux": "^4.2.0",
+    "tsparticles-move-base": "^2.0.6",
+    "tsparticles-plugin-emitters": "^2.0.6",
+    "tsparticles-shape-circle": "^2.0.6",
+    "tsparticles-updater-color": "^2.0.6",
+    "tsparticles-updater-opacity": "^2.0.6",
+    "tsparticles-updater-out-modes": "^2.0.6",
+    "tsparticles-updater-size": "^2.0.6",
     "typescript": "^4.6.3",
     "web-vitals": "^2.1.4"
   },

@@ -17,9 +17,8 @@ const FeedComponent = (props: any) => {
                             <Container fluid>
                                 <Row fluid>
                                     <Col fluid xs={4} md={2}>
-                                        {/* userData[props.uid].profile.photoURL */}
                                         <Image
-                                                src={require("../../assets/img/snoop.jpeg")}
+                                                src={props.userData[props.uid].profile.photoURL}
                                                 roundedCircle
                                                 fluid
                                         />
@@ -49,7 +48,7 @@ const FeedComponent = (props: any) => {
                         props.userData[fid].posts.map((pid: number) => {
                             return (
                                 <Row fluid className="gx-0">
-                                    <Post postData={props.postData} uname={props.userData[props.uid].profile.uname} pid={pid}></Post>
+                                    <Post postData={props.postData} uname={props.userData[fid].profile.uname} pid={pid} uid={props.uid}></Post>
                                 </Row>
                             );
                         })
