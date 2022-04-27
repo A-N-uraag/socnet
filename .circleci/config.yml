@@ -2,7 +2,7 @@ version: 2.0
 jobs:
   build:
     docker:
-      - image: node:14.9.0-alpine
+      - image: node:17.9.0-alpine
     steps:
       - checkout
       - run: |
@@ -12,7 +12,7 @@ jobs:
           # TODO: add options for dev and prod
 
           # deploy client
-          yarn global add firebase-tools && firebase deploy --only hosting --token ${FIREBASE_TOKEN}
+          yarn global add firebase-tools && firebase deploy --only hosting --token "1//0gFTRgmn-UCniCgYIARAAGBASNwF-L9Ir5ckzYoWpB27XSapaYv_0zHKMxktghElLmivieQ17EsNPI8_E6S0tGU3gQ5__XXvdHP4"
 workflows:
   version: 2
   build-and-deploy:
@@ -21,5 +21,4 @@ workflows:
           filters:
             branches:
               only:
-                - develop
-                - master
+                - main
