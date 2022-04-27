@@ -8,10 +8,9 @@ const Post = (props: any) => {
     return (
         <Card className="my-1">
             <Card.Body>
-                {/* <Card.Title>{props.userData[props.uid].profile.uname}</Card.Title> */}
                 <Card.Subtitle> 
                     <p style={{display: "inline-block"}}> 
-                        {props.userData[props.uid].profile.uname}
+                        {props.uname}
                     </p>
                     <FontAwesomeIcon className={"mx-2"}  size="xs" style={{display: "inline-block"}} icon={faDotCircle} /> 
                     <p className="text-secondary" style={{display: "inline-block", color: "secondary"}}> {Moment(props.postData[props.pid].createdDate).format('LL')} </p>
