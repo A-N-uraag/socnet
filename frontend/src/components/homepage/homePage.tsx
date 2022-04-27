@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Container, Row, Col, Nav } from "react-bootstrap";
 import FeedComponent from "../feedComponent/FeedComponent";
+import Post from "../Post/Posts";
 import ProfilePage from "../profilePage/profilePage";
 
 let userData = require("../../assets/data/users.json");
@@ -14,7 +15,9 @@ const Homepage = (props: any) => {
             case "home":
                 return <FeedComponent userData={userData} postData={postData} uid={props.uid}/>;
             case "profile":
-                return <ProfilePage user={userData[props.uid]} postData={postData}/>
+                return <ProfilePage user={userData[props.uid]} postData={postData} uid={props.uid}/>;
+            case "post":
+                return <Post postData={props.postData} uname={props.userData[props.uid].profile.uname} uid={props.uid} full={true}/>
             default:
                 return <FeedComponent userData={userData} postData={postData} uid={props.uid}/>;
         };

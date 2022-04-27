@@ -56,7 +56,7 @@ const ProfilePage = (props: any) => {
                 {props.user.posts.map((pid: number) => {
                     return(
                         <Row fluid className="gx-0">
-                            <Post postData={props.postData} uname={props.user.profile.uname} pid={pid}></Post>
+                            <Post postData={props.postData} uname={props.user.profile.uname} pid={pid} uid={props.user.uid}></Post>
                         </Row>
                     );
                 })}
