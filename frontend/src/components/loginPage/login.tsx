@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './login.scss';
 import logo from "../../assets/logo.jpg";
 import facebook from "../../assets/facebook.svg";
@@ -6,6 +6,8 @@ import google from "../../assets/google.svg";
 import apple from "../../assets/apple.svg";
 import {auth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { ClimbingBoxLoader } from "react-spinners";
 
 function Login() {
     let navigate = useNavigate();
@@ -16,6 +18,15 @@ function Login() {
     const [signUpPassword, setSignUpPassword] = useState('');
     const [signInErrorMessage, setSignInErrorMessage] = useState('');
     const [signUpErrorMessage, setSignUpErrorMessage] = useState('');
+    const [showSpinner, setShowSpinner] = useState(false);
+    const [user, loading, error] = useAuthState(auth);
+
+
+    useEffect(() => {
+        if (loading) return;
+        if (user) navigate("/home");
+        if (error) console.log(error);
+    }, [user, loading, navigate, error]);
 
     const createAccount = (email: string, password: string) => {
         console.log(email, password);
@@ -106,6 +117,7 @@ function Login() {
                     <div className="login__login-container__main-container__form-container">
                         <form className="login__login-container__main-container__form-container__form" onSubmit={(e) => {
                             e.preventDefault();
+                            setShowSpinner(true);
                             signIn(signInEmail, signInPassword);
                         }}>
                             <input
@@ -127,6 +139,7 @@ function Login() {
                                 className="login__login-container__main-container__form-container__form--submit">
                                 Sign In
                             </button>
+                            <ClimbingBoxLoader color="#332FD0" loading={showSpinner}/>
                         </form>
                     </div>
                 </div>
