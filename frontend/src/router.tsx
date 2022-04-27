@@ -15,7 +15,7 @@ class AppRouter extends React.Component {
                         <AuthWrapper Component={<CreateProfile/>}/>
                     } />
                     <Route path="home" element={
-                        <AuthWrapper Component={<HomePage/>}/>
+                        <AuthWrapper Component={<HomePage uid={2}/>}/>
                     } />
                 </Routes>
             </Router>

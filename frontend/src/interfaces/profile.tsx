@@ -1,5 +1,6 @@
 interface Profile{
     uname: string;
+    name: string;
     dob: Date;
     photoURL?: URL;
     loaction?: string;
