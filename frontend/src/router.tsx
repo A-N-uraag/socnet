@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/loginPage/login";
 import HomePage from "./components/homepage/homePage";
 import CreateProfile from "./components/createProfile/createProfile";
+import AuthWrapper from "./requireAuth";
 
-import { RequireAuth } from "./requireAuth";
 class AppRouter extends React.Component {
     render() {
         return (
@@ -12,14 +12,10 @@ class AppRouter extends React.Component {
                 <Routes>
                     <Route path="/" element={<Login/>} />
                     <Route path="create-profile" element={
-                        <RequireAuth>
-                            <CreateProfile />
-                        </RequireAuth>
+                        <CreateProfile />
                     } />
                     <Route path="home" element={
-                        <RequireAuth>
-                            <HomePage uid={2}/>
-                        </RequireAuth>
+                        <AuthWrapper Component={<HomePage/>}/>
                     } />
                 </Routes>
             </Router>

@@ -6,7 +6,6 @@ import ProfilePage from "../profilePage/profilePage";
 let userData = require("../../assets/data/users.json");
 let postData = require("../../assets/data/posts.json");
 
-
 const Homepage = (props: any) => {
     const [switchParam, setSwitchParam] = useState<string>("home");
     
