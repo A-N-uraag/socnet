@@ -12,7 +12,7 @@ class AppRouter extends React.Component {
                 <Routes>
                     <Route path="/" element={<Login/>} />
                     <Route path="create-profile" element={
-                        <CreateProfile />
+                        <AuthWrapper Component={<CreateProfile/>}/>
                     } />
                     <Route path="home" element={
                         <AuthWrapper Component={<HomePage/>}/>

@@ -11,7 +11,7 @@ import { ClimbingBoxLoader } from "react-spinners";
 
 function Login() {
     let navigate = useNavigate();
-    const [login, setLogin] = useState(false);
+    const [login, setLogin] = useState(true);
     const [signInEmail, setSignInEmail] = useState('');
     const [signInPassword, setSignInPassword] = useState('');
     const [signUpEmail, setSignUpEmail] = useState('');
@@ -34,7 +34,10 @@ function Login() {
             .then(() => {
                 navigate('/create-profile');
             })
-            .catch((error) => setSignUpErrorMessage(error.code.slice(error.code.indexOf('/') + 1)));
+            .catch((error) => {
+                setShowSpinner(false);
+                setSignUpErrorMessage(error.code.slice(error.code.indexOf('/') + 1));
+            });
     };
 
     const signIn = (email: string, password: string) => {
@@ -44,7 +47,10 @@ function Login() {
                 navigate('/home');
 
             })
-            .catch((error) => setSignInErrorMessage(error.code.slice(error.code.indexOf('/') + 1)));
+            .catch((error) => {
+                setShowSpinner(false);
+                setSignInErrorMessage(error.code.slice(error.code.indexOf('/') + 1));
+            });
     };
 
     return (
@@ -79,6 +85,8 @@ function Login() {
                 <div className="login__create-container__form-container">
                     <form className="login__create-container__form-container__form" onSubmit={(e) => {
                         e.preventDefault();
+                        setShowSpinner(true);
+                        setSignUpErrorMessage('');
                         createAccount(signUpEmail, signUpPassword);
                     }}>
                         <input
@@ -100,6 +108,7 @@ function Login() {
                             className="login__create-container__form-container__form--submit">
                             Sign Up
                         </button>
+                        <ClimbingBoxLoader color="#332FD0" loading={showSpinner}/>
                     </form>
                 </div>
             </div>
@@ -118,6 +127,7 @@ function Login() {
                         <form className="login__login-container__main-container__form-container__form" onSubmit={(e) => {
                             e.preventDefault();
                             setShowSpinner(true);
+                            setSignInErrorMessage('');
                             signIn(signInEmail, signInPassword);
                         }}>
                             <input
@@ -147,10 +157,10 @@ function Login() {
             <div className={`login__hello-container ${!login ? 'login__hello-container--active' : 'login__hello-container--inactive'}`}>
                 <div className="login__welcome-back__main-container__text-container">
                     <span className="login__welcome-back__main-container__text-container--title">
-                        Hello, stranger!
+                        Hello Stranger!
                         </span>
                     <span className="login__welcome-back__main-container__text-container--secondary">
-                        New to the OASIS? Join the network that's connecting the world!
+                        New to the <b>OASIS</b>? <br/> Join the network that's connecting the world!
                     </span>
                 </div>
                 <div onClick={() => setLogin(!login)} className="login__welcome-back__main-container__button-container">
