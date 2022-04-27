@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, backend-cicd ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, backend-cicd ]
 
 jobs:
   build:
@@ -26,6 +26,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    - run: cd backend
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
@@ -40,3 +41,4 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "socnet-swe"
           heroku_email: "marapallyanuraag@gmail.com"
+          appdir: "backend"
