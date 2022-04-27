@@ -17,9 +17,8 @@ const FeedComponent = (props: any) => {
                             <Container fluid>
                                 <Row fluid>
                                     <Col fluid xs={4} md={2}>
-                                        {/* userData[props.uid].profile.photoURL */}
                                         <Image
-                                                src={require("../../assets/img/snoop.jpeg")}
+                                                src={props.userData[props.uid].profile.photoURL}
                                                 roundedCircle
                                                 fluid
                                         />
