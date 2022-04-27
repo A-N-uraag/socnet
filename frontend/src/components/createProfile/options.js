@@ -61,9 +61,9 @@ export const options = {
                 top: "none" /* none */,
             },
             trail: {
-                enable: true,
+                enable: false,
                 fillColor: "#fff",
-                length: 3,
+                length: 5,
             },
         },
     },
