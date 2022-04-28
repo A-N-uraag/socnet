@@ -3,7 +3,7 @@ const router = express.Router();
 const admin = require('../utils/admin');
 const db = admin.db;
 
-router.post('createProfile', (req, res) => {
+router.post('createUser', (req, res) => {
     const newProfile = {
         uname: req.body.name,
         posts: [],

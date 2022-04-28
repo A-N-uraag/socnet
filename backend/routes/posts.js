@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+const router = express();
 const admin = require('../utils/admin');
 const db = admin.db;
 router.get('getAllPosts', (req, res) => {
