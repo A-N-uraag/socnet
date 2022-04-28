@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.post('/', (req, res) => {
     console.log(req.body);
     const newProfile = {
-        uname: req.body.name || '',
+        uname: req.body.uname || '',
         dob: req.body.dob || '',
         bio: req.body.bio || '',
         website: req.body.website || '',
