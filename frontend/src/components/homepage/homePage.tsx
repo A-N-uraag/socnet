@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Container, Row, Col, Nav } from "react-bootstrap";
+import { auth } from "../../firebase/firebase";
 import FeedComponent from "../feedComponent/FeedComponent";
 import Post from "../Post/Posts";
 import ProfilePage from "../profilePage/profilePage";
@@ -38,6 +39,12 @@ const Homepage = (props: any) => {
                             <Nav.Link style={{color: "#332FD0"}} eventKey="profile">Profile</Nav.Link>
                             <Nav.Link style={{color: "#332FD0"}} eventKey="explore"> Explore </Nav.Link>
                         </Nav>
+                        <button onClick={(e)=>{
+                            e.preventDefault();
+                            auth.signOut();
+                        }}>
+                            Signout
+                        </button>
                     </Col>
                     <Col xs={0} md={1}></Col>
                     <Col fluid xs={8} md={5}>

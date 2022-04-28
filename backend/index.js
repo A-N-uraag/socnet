@@ -8,7 +8,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
 app.post('/createUser', (req, res) => {
     console.log(req.body);
     const newProfile = {
@@ -220,7 +219,6 @@ app.post('/unlikePost', (req, res) => {
             }
         });
 });
-
 
 app.post('/commentPost', (req, res) => {
     const postId = req.body.postId;
