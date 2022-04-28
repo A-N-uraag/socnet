@@ -3,23 +3,12 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const admin = require('./utils/admin');
 const db = admin.db;
-
 const app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
-// app.post('/post', postsHandler.postContent);
-// app.get('/post/:pid', postsHandler.getPost);
-// app.post('/post/:pid/like', postsHandler.likePost);
-// app.post('/post/:pid/unlike', postsHandler.unlikePost);
-// app.post('/post/:pid/comment', postsHandler.commentPost);
-// app.post('/post/:pid/repost', postHandler.repostPost);
-// app.post('/post/:pid/report', postHandler.reportPost);
-// app.delete('/post/:pid/delete', postHandler.deletePost);
-
-app.post('/', (req, res) => {
+app.post('/createuser', (req, res) => {
     console.log(req.body);
     const newProfile = {
         uname: req.body.name || '',
@@ -34,13 +23,40 @@ app.post('/', (req, res) => {
     };
     db.collection('users').doc(req.body.email).set(newProfile).then((doc) => {
         res.json({
-            message: `document ${doc.id} created successfully`
+            message: `user ${req.body.email} created successfully`
         });
     })
     .catch((err) => {
-        res.status(500).json({ error: 'error while creating profile' });
+        res.status(500).json({ error: err });
     });
-})
+});
+
+app.post('/createpost', (req, res) => {
+    console.log(req.body);
+    const newPost = {
+        content: req.body.content || '',
+        createdDate: new Date().toISOString(),
+        likes: 0,
+        comments: [],
+        reposts: 0,
+        noOfReports: 0,
+        postedBy: req.body.user || ''
+    };
+    var docId;
+    db.collection('posts').add(newPost)
+    .then((docu) => {
+        docId = docu.id;
+        return db.collection('users').doc(req.body.user).update({
+            posts: admin.admin.firestore.FieldValue.arrayUnion(docu.id)
+        });
+    })
+    .then((res) => {
+        return {res:res,doc:docId};
+    })
+    .then((resp)=>{
+        res.json(resp);
+    });
+});
 
 const PORT = process.env.PORT || 4000;
 
