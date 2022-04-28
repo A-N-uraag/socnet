@@ -1,10 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const admin = require('./utils/admin');
 const db = admin.db;
 
 const app = express();
-app.use('cors enable mechanism')
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
