@@ -8,5 +8,9 @@
     "express": "^4.18.0",
     "firebase": "^9.6.11",
     "firebase-admin": "^10.1.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "run": "node index.js"
   }
 }
