@@ -27,7 +27,7 @@ function CreateProfile() {
                         body: JSON.stringify({ email: userEmail, uname: userName, dob: dob, bio: bio, website: website, location: location })
                     };
                     console.log(requestOptions.body);
-                    fetch('https://socnet-swe.herokuapp.com', requestOptions)
+                    fetch('https://socnet-swe.herokuapp.com/createUser', requestOptions)
                     .then(response => {
                         console.log(response);
                         if (response.status === 200) {

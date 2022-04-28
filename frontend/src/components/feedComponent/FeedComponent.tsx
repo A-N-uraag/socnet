@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Card, Col, Container, Row, Image, Form, Button } from "react-bootstrap";
 import Post from "../Post/Posts";
+import { auth } from "../../firebase/firebase";
 
 const FeedComponent = (props: any) => {
     const [postText, setPostText] = useState<string>("");
-
+    
+    console.log(props.uid);
     const onPostCaptionWrite = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPostText(event.target.value);
     }
@@ -24,7 +26,27 @@ const FeedComponent = (props: any) => {
                                         />
                                     </Col>
                                     <Col fluid>
-                                        <Form>
+                                        <Form onSubmit={(e)=>{
+                                            e.preventDefault();
+                                            const requestOptions = {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                },
+                                                body: JSON.stringify({
+                                                    user: auth.currentUser?.email,
+                                                    content: postText
+                                                })
+                                            };
+                                            console.log(requestOptions.body);
+                                            fetch('https://socnet-swe.herokuapp.com/createPost', requestOptions)
+                                                .then(response => {
+                                                    console.log(response);
+                                                    if (response.status === 200) {
+                                                        window.location.reload();
+                                                    }
+                                                });
+                                        }}>
                                             <Form.Group controlId="postWriting">
                                                 <Form.Control className="border-0" value={postText} onChange={onPostCaptionWrite} as="textarea" rows={3} placeholder="What's happening?"/>
                                             </Form.Group>
