@@ -70,7 +70,7 @@ const FeedComponent = (props: any) => {
                         props.userData[fid].posts.map((pid: number) => {
                             return (
                                 <Row fluid className="gx-0">
-                                    <Post postData={props.postData} uname={props.userData[fid].profile.uname} pid={pid} uid={props.uid}></Post>
+                                    <Post postData={props.postData} uname={props.userData[fid].profile.uname} pid={pid} fid={fid} uid={props.uid} paramCallback={props.paramCallback} userCallback={props.userCallback} />
                                 </Row>
                             );
                         })

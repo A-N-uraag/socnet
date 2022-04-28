@@ -36,8 +36,9 @@ const Post = (props: any) => {
         setShow(false);
     };
     const triggerEvent = () => {
-        props.setUser(props.uid);
-        props.paramCallback("user")
+        console.log("Hello")
+        props.userCallback(props.fid);
+        props.paramCallback("user");
     };
     return (
         <Card className="my-1">

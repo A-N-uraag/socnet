@@ -12,6 +12,7 @@ const UserProfile = (props: any) => {
     const handleEdge = () => {
         setFollowing(!following);
     };
+    console.log(props.user);
     return(
         <>
             <Container fluid>

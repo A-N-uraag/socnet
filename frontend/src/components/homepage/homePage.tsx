@@ -16,13 +16,13 @@ const Homepage = (props: any) => {
     const renderSwitch = (param: string) => {
         switch(param) {
             case "home":
-                return <FeedComponent userData={userData} postData={postData} uid={props.uid}/>;
+                return <FeedComponent userData={userData} postData={postData} uid={props.uid} paramCallback={setSwitchParam} userCallback={setUser}/>;
             case "profile":
                 return <ProfilePage user={userData[props.uid]} postData={postData} uid={props.uid}/>;
             case "post":
                 return <Post postData={props.postData} uname={props.userData[props.uid].profile.uname} uid={props.uid} full={true} paramCallback={setSwitchParam} userCallback={setUser}/>
             case "user":
-                return <UserProfile vid={props.uid} user={userData[user]} postData={postData} uid={user}/>;
+                return <UserProfile vid={props.uid} fid={user} user={userData[user]} postData={props.postData} uid={user}/>;
             default:
                 return <FeedComponent userData={userData} postData={postData} uid={props.uid}/>;
         };
