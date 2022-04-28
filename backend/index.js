@@ -40,13 +40,13 @@ app.post('/createPost', (req, res) => {
         comments: [],
         reposts: 0,
         noOfReports: 0,
-        postedBy: req.body.user || ''
+        postedBy: req.body.email || ''
     };
     var docId;
     db.collection('posts').add(newPost)
     .then((docu) => {
         docId = docu.id;
-        return db.collection('users').doc(req.body.user).update({
+        return db.collection('users').doc(req.body.email).update({
             posts: admin.admin.firestore.FieldValue.arrayUnion(docu.id)
         });
     })
@@ -58,163 +58,164 @@ app.post('/createPost', (req, res) => {
     });
 });
 
-app.get('/getAllPosts', (req, res) => {
-    db.collection('posts').get()
-        .then((snapshot) => {
-            const posts = [];
-            snapshot.forEach((doc) => {
-                posts.push(doc.data());
-            });
-            res.json(posts);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).json({error: err.code});
-        });
-});
+app.get('/getPosts', async (req, res) => {
+    const idList = req.body.idList || [];
+    posts = {};
+    await Promise.all(idList.map(async (id) => {
 
-app.get('/getPost', (req, res) => {
-    const postId = req.body.postId;
-    const postRef = db.collection('posts').doc(postId);
-    postRef.get()
-        .then((doc) => {
-            if(doc.exists){
-                res.json(doc.data());
-            }
-            else{
-                res.status(404).json({error: 'post not found'});
-            }
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).json({error: err.code});
-        });
+        const post = await db.collection('posts').doc(id).get();
+        posts[id] = post.data();
+    }));
+    res.json(posts);
 });
 
 app.post('/likePost', (req, res) => {
     const postId = req.body.postId;
-    const postRef =db.collection('posts').doc(postId);
-    postRef.get()
-        .then((doc) => {
-            if(doc.exists){
-                const postData = doc.data();
-                postData.likes++;
-                postRef.update(postData).then(() => {
-                    return res.json({
-                        message: `post ${postId} liked successfully`
-                    });
-                });
-            }
-            else{
-                res.status(404).json({error: 'post not found'});
-            }
-        })
+    db.collection('posts').doc(postId).update({
+        likes: admin.admin.firestore.FieldValue.increment(1)
+    }).then(() => {
+        res.json({
+            message: `post ${postId} liked`
+        });
+    });
 });
 
 app.post('/unlikePost', (req, res) => {
     const postId = req.body.postId;
-    const postRef = db.collection('posts').doc(postId);
-    postRef.get()
-        .then((doc) => {
-            if(doc.exists){
-                const postData = doc.data();
-                if(postData.likes > 0)
-                postData.likes--;
-                else{
-                    return res.json({
-                        message: 'cant unlike post with no likes'
-                    });
-                }
-                postRef.update(postData).then(() => {
-                    return res.json({
-                        message: `post ${postId} unliked successfully`
-                    });
-                });
-            }
-            else{
-                res.status(404).json({error: 'post not found'});
-            }
+    db.collection('posts').doc(postId).update({
+        likes: admin.admin.firestore.FieldValue.increment(-1)
+    }).then(() => {
+        res.json({
+            message: `post ${postId} unliked`
         });
+    });
 });
 
-app.post('/commentPost', (req, res) => {
-    const postId = req.body.postId;
-    const postRef = db.collection('posts').doc(postId);
-    postRef.get()
-        .then((doc) => {
-            if(doc.exists){
-                const postData = doc.data();
-                postData.comments.push(req.body.comment);
-                postRef.update(postData).then(() => {
-                    return res.json({
-                        message: `comment added successfully`
-                    });
-                });
-            }
-            else{
-                res.status(404).json({error: 'post not found'});
-            }
+app.post('/followUser', (req, res) => {
+    const userId = req.body.userId;
+    const followerId = req.body.followerId;
+    db.collection('users').doc(userId).update({
+        followers: admin.admin.firestore.FieldValue.arrayUnion(followerId)
+    }).then(() => {
+        db.collection('users').doc(followerId).update({
+            following: admin.admin.firestore.FieldValue.arrayUnion(userId)
+        }).then(() => {
+            res.json({
+                message: `user ${userId} followed`
+            });
         });
+    });
 });
 
-app.post('/repostPost', (req, res) => {
-    const postId = req.body.postId;
-    const postRef = db.collection('posts').doc(postId);
-    postRef.get()
-        .then((doc) => {
-            if(doc.exists){
-                const postData = doc.data();
-                postData.reposts++;
-                postRef.update(postData).then(() => {
-                    return res.json({
-                        message: `post ${postId} reposted successfully`
-                    });
-                });
-            }
-            else{
-                res.status(404).json({error: 'post not found'});
-            }
+app.post('/unfollowUser', (req, res) => {
+    const userId = req.body.userId;
+    const followerId = req.body.followerId;
+    db.collection('users').doc(userId).update({
+        followers: admin.admin.firestore.FieldValue.arrayRemove(followerId)
+    }).then(() => {
+        db.collection('users').doc(followerId).update({
+            following: admin.admin.firestore.FieldValue.arrayRemove(userId)
+        }).then(() => {
+            res.json({
+                message: `user ${userId} unfollowed`
+            });
         });
+    });
 });
 
-app.post('/reportPost', (req, res) => {
-    const postId = req.body.postId;
-    const postRef = db.collection('posts').doc(postId);
-    postRef.get()
-        .then((doc) => {
-            if(doc.exists){
-                const postData = doc.data();
-                postData.noOfReports++;
-                postRef.update(postData).then(() => {
-                    return res.json({
-                        message: `post ${postId} reported successfully`
-                    });
-                });
-            }
-            else{
-                res.status(404).json({error: 'post not found'});
-            }
+app.post('/generateFeed', (req, res) => {
+    const userId = req.body.userId;
+    db.collection('users').doc(userId).get().then((doc) => {
+        const following = doc.data().following;
+        return db.collection('posts').where('postedBy', 'in', following).orderBy('createdDate', 'desc').limit(30).get();
+    }).then((querySnapshot) => {
+        const posts = {};
+        querySnapshot.forEach((doc) => {
+            posts[doc.id] = doc.data();
         });
+        res.json(posts);
+    });
 });
 
-app.delete('/deletePost', (req, res) => {
-    const postId = req.body.postId;
-    const postRef = db.collection('posts').doc(postId);
-    postRef.get()
-        .then((doc) => {
-            if(doc.exists){
-                const postData = doc.data();
-                postRef.delete().then(() => {
-                    return res.json({
-                        message: `post ${postId} deleted successfully`
-                    });
-                });
-            }
-            else{
-                res.status(404).json({error: 'post not found'});
-            }
-        });
-});
+
+// app.post('/commentPost', (req, res) => {
+//     const postId = req.body.postId;
+//     const postRef = db.collection('posts').doc(postId);
+//     postRef.get()
+//         .then((doc) => {
+//             if(doc.exists){
+//                 const postData = doc.data();
+//                 postData.comments.push(req.body.comment);
+//                 postRef.update(postData).then(() => {
+//                     return res.json({
+//                         message: `comment added successfully`
+//                     });
+//                 });
+//             }
+//             else{
+//                 res.status(404).json({error: 'post not found'});
+//             }
+//         });
+// });
+
+// app.post('/repostPost', (req, res) => {
+//     const postId = req.body.postId;
+//     const postRef = db.collection('posts').doc(postId);
+//     postRef.get()
+//         .then((doc) => {
+//             if(doc.exists){
+//                 const postData = doc.data();
+//                 postData.reposts++;
+//                 postRef.update(postData).then(() => {
+//                     return res.json({
+//                         message: `post ${postId} reposted successfully`
+//                     });
+//                 });
+//             }
+//             else{
+//                 res.status(404).json({error: 'post not found'});
+//             }
+//         });
+// });
+
+// app.post('/reportPost', (req, res) => {
+//     const postId = req.body.postId;
+//     const postRef = db.collection('posts').doc(postId);
+//     postRef.get()
+//         .then((doc) => {
+//             if(doc.exists){
+//                 const postData = doc.data();
+//                 postData.noOfReports++;
+//                 postRef.update(postData).then(() => {
+//                     return res.json({
+//                         message: `post ${postId} reported successfully`
+//                     });
+//                 });
+//             }
+//             else{
+//                 res.status(404).json({error: 'post not found'});
+//             }
+//         });
+// });
+
+// app.delete('/deletePost', (req, res) => {
+//     const postId = req.body.postId;
+//     const postRef = db.collection('posts').doc(postId);
+//     postRef.get()
+//         .then((doc) => {
+//             if(doc.exists){
+//                 const postData = doc.data();
+//                 postRef.delete().then(() => {
+//                     return res.json({
+//                         message: `post ${postId} deleted successfully`
+//                     });
+//                 });
+//             }
+//             else{
+//                 res.status(404).json({error: 'post not found'});
+//             }
+//         });
+// });
 
 const PORT = process.env.PORT || 4000;
 
