@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import "./createProfile.scss";
 import { ParticlesContainer } from './particlesBG';
 
 function CreateProfile() {
     const {state} = useLocation();
+    const navigate = useNavigate();
     const userEmail = state.userEmail;
     const [userName, setUserName] = useState("");
     const [dob, setDob] = useState("");
@@ -25,8 +26,14 @@ function CreateProfile() {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ email: userEmail, uname: userName, dob: dob, bio: bio, website: website, location: location })
                     };
+                    console.log(requestOptions.body);
                     fetch('https://socnet-swe.herokuapp.com', requestOptions)
-                    .then(response => console.log(response));
+                    .then(response => {
+                        console.log(response);
+                        if (response.status === 200) {
+                            navigate('/home');
+                        }
+                    });
                     e.preventDefault();
                 }}>
                     <input
