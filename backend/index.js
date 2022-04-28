@@ -4,6 +4,7 @@ const admin = require('./utils/admin');
 const db = admin.db;
 
 const app = express();
+app.use('cors enable mechanism')
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
