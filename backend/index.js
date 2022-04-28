@@ -32,87 +32,97 @@ app.post('/createUser', (req, res) => {
 });
 
 
-// app.post('/follow', (req, res) => {
-//     const userId = req.body.email;
-//     const followeeId = req.body.followeeId;
-//     const userRef = db.collection('users').doc(userId);
-//     const followeeRef = db.collection('users').doc(followeeId);
-//     userRef.get().then((doc) => {
-//         if (doc.exists) {
-//             userRef.update({
-//                 following: admin.admin.firestore.FieldValue.arrayUnion(followeeId)
-//             }).then(() => {
-//                 res.json({
-//                     message: `user ${userId} followed ${followeeId}`
-//                 });
-//             }).catch((err) => {
-//                 res.status(500).json({ error: err });
-//             });
-//         } else {
-//             res.status(404).json({ error: 'followee not found' });
-//         }
-//     });
-//     followeeRef.get().then((doc) => {
-//         if (doc.exists) {
-//             followeeRef.update({
-//                 followers: admin.admin.firestore.FieldValue.arrayUnion(userId)
-//             }).then(() => {
-//                 res.json({
-//                     message: `user ${followeeId} is followed by${userId}`
-//                 });
-//             }).catch((err) => {
-//                 res.status(500).json({ error: err });
-//             });
-//         } else {
-//             res.status(404).json({ error: 'user not found' });
-//         }
-//     })
-//     .catch((err) => {
-//         res.status(500).json({ error: err });
-//     });
-// });
+app.post('/follow', (req, res) => {
+    const userId = req.body.email;
+    const followeeId = req.body.followeeId;
+    const userRef = db.collection('users').doc(userId);
+    const followeeRef = db.collection('users').doc(followeeId);
+    let repstring = "";
+    userRef.get().then((doc) => {
+        if (doc.exists) {
+            userRef.update({
+                following: admin.admin.firestore.FieldValue.arrayUnion(followeeId)
+            }).then(() => {
+                repstring += `user ${userId} followed ${followeeId}\n`;
+                // res.json({
+                //     message: `user ${userId} followed ${followeeId}`
+                // });
+            }).catch((err) => {
+                res.status(500).json({ error: err });
+            });
+        } else {
+            res.status(404).json({ error: 'current user not found' });
+        }
+    });
+    followeeRef.get().then((doc) => {
+        if (doc.exists) {
+            followeeRef.update({
+                followers: admin.admin.firestore.FieldValue.arrayUnion(userId)
+            }).then(() => {
+                repstring += `user ${followeeId} followed by ${userId}\n`;
+                // res.json({
+                //     message: `user ${followeeId} is followed by${userId}`
+                // });
+                res.json({
+                    message: repstring
+                });
+            }).catch((err) => {
+                res.status(500).json({ error: err });
+            });
+        } else {
+            res.status(404).json({ error: 'user not found' });
+        }
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err });
+    });
+});
 
 
 
-// app.post('/unfollow', (req, res) => {
-//     const userId = req.body.email;
-//     const followeeId = req.body.followeeId;
-//     const userRef = db.collection('users').doc(userId);
-//     const followeeRef = db.collection('users').doc(followeeId);
-//     userRef.get().then((doc) => {
-//         if (doc.exists) {
-//             userRef.update({
-//                 following: admin.admin.firestore.FieldValue.arrayRemove(followeeId)
-//             }).then(() => {
-//                 res.json({
-//                     message: `user ${userId} unfollowed ${followeeId}`
-//                 });
-//             }).catch((err) => {
-//                 res.status(500).json({ error: err });
-//             });
-//         } else {
-//             res.status(404).json({ error: 'followee not found' });
-//         }
-//     });
-//     followeeRef.get().then((doc) => {
-//         if (doc.exists) {
-//             followeeRef.update({
-//                 followers: admin.admin.firestore.FieldValue.arrayRemove(userId)
-//             }).then(() => {
-//                 res.json({
-//                     message: `user ${followeeId} is unfollowed by ${userId}`
-//                 });
-//             }).catch((err) => {
-//                 res.status(500).json({ error: err });
-//             });
-//         } else {
-//             res.status(404).json({ error: 'user not found' });
-//         }
-//     })
-//     .catch((err) => {
-//         res.status(500).json({ error: err });
-//     });
-// });
+app.post('/unfollow', (req, res) => {
+    const userId = req.body.email;
+    const followeeId = req.body.followeeId;
+    const userRef = db.collection('users').doc(userId);
+    const followeeRef = db.collection('users').doc(followeeId);
+    let repstring = "";
+    userRef.get().then((doc) => {
+        if (doc.exists) {
+            userRef.update({
+                following: admin.admin.firestore.FieldValue.arrayRemove(followeeId)
+            }).then(() => {
+                repstring += `user ${userId} unfollowed ${followeeId}\n`;
+                // res.json({
+                //     message: `user ${userId} unfollowed ${followeeId}`
+                // });
+            }).catch((err) => {
+                res.status(500).json({ error: err });
+            });
+        } else {
+            res.status(404).json({ error: 'followee not found' });
+        }
+    });
+    followeeRef.get().then((doc) => {
+        if (doc.exists) {
+            followeeRef.update({
+                followers: admin.admin.firestore.FieldValue.arrayRemove(userId)
+            }).then(() => {
+                repstring += `user ${followeeId} unfollowed by ${userId}\n`;
+                // res.json({
+                //     message: `user ${followeeId} is unfollowed by ${userId}`
+                // });
+                res.json({ message: repstring });
+            }).catch((err) => {
+                res.status(500).json({ error: err });
+            });
+        } else {
+            res.status(404).json({ error: 'user not found' });
+        }
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err });
+    });
+});
 
 app.post('/createPost', (req, res) => {
     console.log(req.body);
