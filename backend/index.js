@@ -8,8 +8,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
-app.post('/createUser', (req, res) => {
+app.post('/createuser', (req, res) => {
     console.log(req.body);
     const newProfile = {
         uname: req.body.uname || '',
@@ -32,7 +31,7 @@ app.post('/createUser', (req, res) => {
     });
 });
 
-app.post('/createPost', (req, res) => {
+app.post('/createpost', (req, res) => {
     console.log(req.body);
     const newPost = {
         content: req.body.content || '',
@@ -57,165 +56,6 @@ app.post('/createPost', (req, res) => {
     .then((resp)=>{
         res.json(resp);
     });
-});
-
-app.get('/getAllPosts', (req, res) => {
-    db.collection('posts').get()
-        .then((snapshot) => {
-            const posts = [];
-            snapshot.forEach((doc) => {
-                posts.push(doc.data());
-            });
-            res.json(posts);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).json({error: err.code});
-        });
-});
-
-app.get('/getPost', (req, res) => {
-    const postId = req.body.postId;
-    const postRef = db.collection('posts').doc(postId);
-    postRef.get()
-        .then((doc) => {
-            if(doc.exists){
-                res.json(doc.data());
-            }
-            else{
-                res.status(404).json({error: 'post not found'});
-            }
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).json({error: err.code});
-        });
-});
-
-app.post('/likePost', (req, res) => {
-    const postId = req.body.postId;
-    const postRef =db.collection('posts').doc(postId);
-    postRef.get()
-        .then((doc) => {
-            if(doc.exists){
-                const postData = doc.data();
-                postData.likes++;
-                postRef.update(postData).then(() => {
-                    return res.json({
-                        message: `post ${postId} liked successfully`
-                    });
-                });
-            }
-            else{
-                res.status(404).json({error: 'post not found'});
-            }
-        })
-});
-
-app.post('/unlikePost', (req, res) => {
-    const postId = req.body.postId;
-    const postRef = db.collection('posts').doc(postId);
-    postRef.get()
-        .then((doc) => {
-            if(doc.exists){
-                const postData = doc.data();
-                if(postData.likes > 0)
-                postData.likes--;
-                else{
-                    return res.json({
-                        message: 'cant unlike post with no likes'
-                    });
-                }
-                postRef.update(postData).then(() => {
-                    return res.json({
-                        message: `post ${postId} unliked successfully`
-                    });
-                });
-            }
-            else{
-                res.status(404).json({error: 'post not found'});
-            }
-        });
-});
-
-
-app.post('/commentPost', (req, res) => {
-    const postId = req.body.postId;
-    const postRef = db.collection('posts').doc(postId);
-    postRef.get()
-        .then((doc) => {
-            if(doc.exists){
-                const postData = doc.data();
-                postData.comments.push(req.body.comment);
-                postRef.update(postData).then(() => {
-                    return res.json({
-                        message: `comment added successfully`
-                    });
-                });
-            }
-            else{
-                res.status(404).json({error: 'post not found'});
-            }
-        });
-});
-
-app.post('/repostPost', (req, res) => {
-    const postId = req.body.postId;
-    const postRef = db.collection('posts').doc(postId);
-    postRef.get()
-        .then((doc) => {
-            if(doc.exists){
-                const postData = doc.data();
-                postData.reposts++;
-                postRef.update(postData).then(() => {
-                    return res.json({
-                        message: `post ${postId} reposted successfully`
-                    });
-                });
-            }
-            else{
-                res.status(404).json({error: 'post not found'});
-            }
-        });
-});
-
-app.post('/reportPost', (req, res) => {
-    const postId = req.body.postId;
-    const postRef = db.collection('posts').doc(postId);
-    postRef.get()
-        .then((doc) => {
-            if(doc.exists){
-                const postData = doc.data();
-                postData.noOfReports++;
-                postRef.update(postData).then(() => {
-                    return res.json({
-                        message: `post ${postId} reported successfully`
-                    });
-                });
-            }
-            else{
-                res.status(404).json({error: 'post not found'});
-            }
-        });
-});
-
-app.delete('/deletePost', (req, res) => {
-    const postId = req.body.postId;
-    const postRef = db.collection('posts').doc(postId);
-    postRef.get()
-        .then((doc) => {
-            if(doc.exists){
-                const postData = doc.data();
-                postRef.delete().then(() => {
-                    return res.json({
-                        message: `post ${postId} deleted successfully`
-                    });
-                });
-            }
-            else{
-                res.status(404).json({error: 'post not found'});
-            }
-        });
 });
 
 const PORT = process.env.PORT || 4000;
