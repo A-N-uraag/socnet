@@ -3,12 +3,14 @@ import { Container, Row, Col, Nav } from "react-bootstrap";
 import FeedComponent from "../feedComponent/FeedComponent";
 import Post from "../Post/Posts";
 import ProfilePage from "../profilePage/profilePage";
+import UserProfile from "../userPage/userPage";
 
 let userData = require("../../assets/data/users.json");
 let postData = require("../../assets/data/posts.json");
 
 const Homepage = (props: any) => {
     const [switchParam, setSwitchParam] = useState<string>("home");
+    const [user, setUser] = useState<number>(-1);
     
     const renderSwitch = (param: string) => {
         switch(param) {
@@ -17,7 +19,9 @@ const Homepage = (props: any) => {
             case "profile":
                 return <ProfilePage user={userData[props.uid]} postData={postData} uid={props.uid}/>;
             case "post":
-                return <Post postData={props.postData} uname={props.userData[props.uid].profile.uname} uid={props.uid} full={true}/>
+                return <Post postData={props.postData} uname={props.userData[props.uid].profile.uname} uid={props.uid} full={true} paramCallback={setSwitchParam} userCallback={setUser}/>
+            case "user":
+                return <UserProfile vid={props.uid} user={userData[user]} postData={postData} uid={user}/>;
             default:
                 return <FeedComponent userData={userData} postData={postData} uid={props.uid}/>;
         };

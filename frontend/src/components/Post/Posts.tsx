@@ -16,16 +16,16 @@ const Post = (props: any) => {
     const onLikeClick = () => {
         likeClicked ? setLikes(likes-1) : setLikes(likes+1);
         setLikeClicked(!likeClicked);
-    }
+    };
     const onCommentChange = (event: any) => {
         setComment(event.target.value);
-    }
+    };
     const handleClose = () => {
         setShow(false);
-    }
+    };
     const onCommentClick = () => {
         setShow(true);
-    }
+    };
     const handleSubmit = () => {
         if(comment === ""){
             console.log("No comment");
@@ -34,12 +34,16 @@ const Post = (props: any) => {
             console.log(comment);
         }
         setShow(false);
-    }
+    };
+    const triggerEvent = () => {
+        props.setUser(props.uid);
+        props.paramCallback("user")
+    };
     return (
         <Card className="my-1">
             <Card.Body>
                 <Card.Subtitle> 
-                    <p style={{display: "inline-block"}}> 
+                    <p style={{display: "inline-block"}} onClick={triggerEvent}> 
                         {props.uname}
                     </p>
                     <FontAwesomeIcon className={"mx-2"}  size="xs" style={{display: "inline-block"}} icon={faDotCircle} /> 
