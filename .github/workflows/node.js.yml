@@ -3,7 +3,8 @@ name: Deploy
 on:
   push:
     branches:
-      - master
+      - main
+      - backend-cicd
 
 jobs:
   build:
