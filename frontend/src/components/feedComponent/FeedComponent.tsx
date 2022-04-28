@@ -1,11 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, Col, Container, Row, Image, Form, Button } from "react-bootstrap";
 import Post from "../Post/Posts";
 import { auth } from "../../firebase/firebase";
 
 const FeedComponent = (props: any) => {
     const [postText, setPostText] = useState<string>("");
-    
+    var posts = {};
+    useEffect(() => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: auth.currentUser?.email})
+        };
+        console.log(requestOptions.body);
+        fetch('https://socnet-swe.herokuapp.com/generateFeed', requestOptions)
+        .then((response) => {
+            console.log("hello");
+            console.log({response});
+            posts = response;
+        });
+    }, []);
     console.log(props.uid);
     const onPostCaptionWrite = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPostText(event.target.value);
@@ -65,17 +79,7 @@ const FeedComponent = (props: any) => {
                         </Card.Body>
                     </Card>
                 </Row>
-                {props.userData[props.uid].followees.map((fid: number) => {
-                    return (
-                        props.userData[fid].posts.map((pid: number) => {
-                            return (
-                                <Row fluid className="gx-0">
-                                    <Post postData={props.postData} uname={props.userData[fid].profile.uname} pid={pid} fid={fid} uid={props.uid} paramCallback={props.paramCallback} userCallback={props.userCallback} />
-                                </Row>
-                            );
-                        })
-                    );
-                })}
+                
             </Container>
         </>
     );
