@@ -1,16 +1,17 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import "./createProfile.scss";
 import { ParticlesContainer } from './particlesBG';
 
 function CreateProfile() {
+    const {state} = useLocation();
+    const userEmail = state.userEmail;
     const [userName, setUserName] = useState("");
     const [dob, setDob] = useState("");
     const [bio, setBio] = useState("");
-    const [selectedImage, setSelectedImage] = useState<Blob|null>(null);
+    const [selectedImage, setSelectedImage] = useState(null);
     const [website, setWebsite] = useState("");
     const [location, setLocation] = useState("");
-
-    
 
     return(
         <div>
@@ -19,6 +20,13 @@ function CreateProfile() {
                 <div className="headerTitle">Hooray!</div>
                 <div className='secondaryHeader'>You are just a step away from becoming part of OASIS!</div>
                 <form className="login__create-container__form-container__form" onSubmit={(e) => {
+                    const requestOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: userEmail, uname: userName, dob: dob, bio: bio, website: website, location: location })
+                    };
+                    fetch('https://socnet-swe.herokuapp.com', requestOptions)
+                    .then(response => console.log(response));
                     e.preventDefault();
                 }}>
                     <input

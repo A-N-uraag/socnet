@@ -32,7 +32,7 @@ function Login() {
         console.log(email, password);
         createUserWithEmailAndPassword(auth, email, password)
             .then(() => {
-                navigate('/create-profile');
+                navigate('/create-profile', {state:{userEmail:email}});
             })
             .catch((error) => {
                 setShowSpinner(false);
