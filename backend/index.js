@@ -9,8 +9,27 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+const {postContent, getPost, likePost, unlikePost, commentPost, repostPost, reportPost, deletePost, getAllPosts} = require('./routes/posts');
 
-// app.post('/post', postsHandler.postContent);
+app.post('/post', (req, res) => {
+    const newPost = {
+        content: req.body.content,
+        createdDate: new Date().toISOString(),
+        likes: 0,
+        comments: [],
+        reposts: 0,
+        noOfReports: 0
+    };
+
+    db.collection('posts').add(newPost).then((doc) => {
+        res.json({
+            message: `document ${doc.id} created successfully`
+        });
+    })
+    .catch((err) => {
+        res.status(500).json({ error: 'error while creating post' });
+    });
+});
 // app.get('/post/:pid', postsHandler.getPost);
 // app.post('/post/:pid/like', postsHandler.likePost);
 // app.post('/post/:pid/unlike', postsHandler.unlikePost);

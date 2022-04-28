@@ -1,8 +1,8 @@
-const express = require('express');
-const router = express();
+// const express = require('express');
+// const router = express();
 const admin = require('../utils/admin');
 const db = admin.db;
-router.get('getAllPosts', (req, res) => {
+exports.getAllPosts = (req, res) => {
     const postsRef = db.collection('posts');
     postsRef.get()
         .then(snapshot => {
@@ -20,9 +20,9 @@ router.get('getAllPosts', (req, res) => {
             return res.json(posts);
         })
         .catch(err => console.error(err));
-});
+};
 
-router.post('post', (req, res) => {
+exports.post = (req, res) => {
     const newPost = {
         content: req.body.content,
         createdDate: new Date().toISOString(),
@@ -40,9 +40,9 @@ router.post('post', (req, res) => {
     .catch((err) => {
         res.status(500).json({ error: 'error while creating post' });
     });
-});
+};
 
-router.get('getPost', (req, res) => {
+exports.getPost = (req, res) => {
     let postContent = {};
     const postId = req.params.pid;
     const posRef = db.collection('posts').doc(postId);
@@ -58,9 +58,9 @@ router.get('getPost', (req, res) => {
         console.error(err);
         res.status(500).json({error: err.code});
     });
-});
+};
 
-router.post('likePost', (req, res) => {
+exports.likePost = (req, res) => {
     const postId = req.params.pid;
     const postRef = db.collection('posts').doc(postId);
     postRef.get().then((doc) => {
@@ -80,9 +80,9 @@ router.post('likePost', (req, res) => {
         console.error(err);
         res.status(500).json({error: err.code});
     });
-});
+};
 
-router.post('unlikePost', (req, res) => {
+exports.unlikePost = (req, res) => {
     const postId = req.params.pid;
     const postRef = db.collection('posts').doc(postId);
     postRef.get().then((doc) => {
@@ -108,10 +108,10 @@ router.post('unlikePost', (req, res) => {
         console.error(err);
         res.status(500).json({error: err.code});
     });
-});
+};
 
 
-router.post('commentPost', (req, res) => {
+exports.commentPost = (req, res) => {
     const postId = req.params.pid;
     const postRef = db.collection('posts').doc(postId);
     postRef.get().then((doc) => {
@@ -131,9 +131,9 @@ router.post('commentPost', (req, res) => {
         console.error(err);
         res.status(500).json({error: err.code});
     });
-});
+};
 
-router.delete('deletePost', (req, res) => {
+exports.deletePost = (req, res) => {
     const postId = req.params.pid;
     const postRef = db.collection('posts').doc(postId);
     postRef.get().then((doc) => {
@@ -151,9 +151,9 @@ router.delete('deletePost', (req, res) => {
         console.error(err);
         res.status(500).json({error: err.code});
     });
-});
+};
 
-router.post('repostPost', (req, res) => {
+exports.repostPost = (req, res) => {
     const postId = req.params.pid;
     const postRef = db.collection('posts').doc(postId);
     postRef.get().then((doc) => {
@@ -173,9 +173,9 @@ router.post('repostPost', (req, res) => {
         console.error(err);
         res.status(500).json({error: err.code});
     });
-});
+};
 
-router.post('reportPost', (req, res) => {
+exports.reportPost = (req, res) => {
     const postId = req.params.pid;
     const postRef = db.collection('posts').doc(postId);
     postRef.get().then((doc) => {
@@ -195,7 +195,4 @@ router.post('reportPost', (req, res) => {
         console.error(err);
         res.status(500).json({error: err.code});
     });
-});
-
-
-module.exports = router;
+};
