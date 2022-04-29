@@ -3,33 +3,67 @@ import { faLocationDot, faLink, faCakeCandles, faCalendarDays } from "@fortaweso
 import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import Moment from "moment";
 import "./profilePage.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Post from "../Post/Posts";
+import { auth } from "../../firebase/firebase";
+import { ClimbingBoxLoader } from "react-spinners";
 
-const ProfilePage = (props: any) => {
+const override = `
+  display: block;
+  margin: 25% auto;
+  border-color: red;
+`;
+
+const ProfilePage = () => {
     const [imgLoaded, setImgLoaded] = useState<boolean>(false);
+    const [user, setUser] = useState<any>({})
+    const [posts, setPosts] = useState<any>([])
+
+    useEffect(() => {
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+        fetch('https://socnet-swe.herokuapp.com/getUser?email=' + auth.currentUser?.email, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            setUser(data);
+            const postsRequestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "idList":data.posts })
+            };
+            fetch('https://socnet-swe.herokuapp.com/getPosts?', postsRequestOptions)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setPosts(data);
+            });
+        });
+    }, []);
+
     return (
         <>
             <Container fluid>
                 <Row fluid className="gx-0">
                     <Card>
-                        <Card.Img variant="top" style={imgLoaded ? {} : {display: 'none'}} src={props.user.profile.photoURL}  onLoad={() => setImgLoaded(true)} />
+                        <Card.Img variant="top" style={imgLoaded ? {} : {display: 'none'}} src={"https://avatars.dicebear.com/api/bottts/"+auth.currentUser?.email+".svg?colorful=1"}  onLoad={() => setImgLoaded(true)} />
                         <Card.Body>
-                            <Card.Title>{props.user.profile.name}</Card.Title>
-                            <Card.Subtitle> <p className="text-secondary"> {props.user.profile.uname} </p> </Card.Subtitle>
+                            <Card.Title>{user.uname}</Card.Title>
+                            <Card.Subtitle> <p className="text-secondary"> {auth.currentUser?.email} </p> </Card.Subtitle>
                             <Container fluid>
                                 <Row fluid className="gx-0">
                                     <Col fluid sm={3}>
-                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faLocationDot} /> <p style={{display: "inline-block"}}>{props.user.profile.location ? props.user.profile.location : "Zombieland"}</p>
+                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faLocationDot} /> <p style={{display: "inline-block"}}>{user.location ? user.location : "Zombieland"}</p>
                                     </Col>
                                     <Col fluid sm={3}>
-                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faLink} /> <a href={props.user.profile.website ? props.user.profile.website : "https://google.co.in"} style={{display: "inline-block", color: "#332FD0"}}>Homepage</a>
+                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faLink} /> <a href={user.website ? user.website : "https://google.co.in"} style={{display: "inline-block", color: "#332FD0"}}>Homepage</a>
                                     </Col>
                                     <Col fluid sm={3}>
-                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faCakeCandles} /> <p style={{display: "inline-block"}}>{Moment(props.user.profile.dob).format('LL')}</p>
+                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faCakeCandles} /> <p style={{display: "inline-block"}}>{Moment(user.dob).format('LL')}</p>
                                     </Col>
                                     <Col fluid sm={3}>
-                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faCalendarDays} /> <p style={{display: "inline-block"}}>{Moment(props.user.profile.createdDate).format('LL')}</p>
+                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faCalendarDays} /> <p style={{display: "inline-block"}}>{Moment(user.createdDate).format('LL')}</p>
                                     </Col>
                                 </Row>
                             </Container>
@@ -40,12 +74,12 @@ const ProfilePage = (props: any) => {
                                 <Row fluid className="gx-0 gy-0 py-0 my-0">
                                     <Col fluid className="py-0 my-0">
                                         <div className="centerAlign py-0 my-0">
-                                            <b style={{display: "inline-block"}}>{props.user.followers.length}</b> <p style={{display: "inline-block"}} className="text-secondary">Followers</p>
+                                            <b style={{display: "inline-block"}}>{user.followers ? user.followers.length : 0}</b> <p style={{display: "inline-block"}} className="text-secondary">Followers</p>
                                         </div>
                                     </Col>
                                     <Col fluid className="py-0 my-0">
                                         <div className="centerAlign py-0 my-0">
-                                            <b style={{display: "inline-block"}}>{props.user.followees.length}</b> <p style={{display: "inline-block"}} className="text-secondary">Following</p>
+                                            <b style={{display: "inline-block"}}>{user.followers ? user.following.length : 0}</b> <p style={{display: "inline-block"}} className="text-secondary">Following</p>
                                         </div>
                                     </Col>
                                 </Row>
@@ -53,10 +87,12 @@ const ProfilePage = (props: any) => {
                         </Card.Footer>
                     </Card>
                 </Row>
-                {props.user.posts.map((pid: number) => {
-                    return(
+                <ClimbingBoxLoader color="#332FD0" size={20} css={override} loading={Object.keys(posts).length===0}/>
+                {Object.keys(posts).map((pid: string) => {   
+                    const post:any = posts[pid];
+                    return (
                         <Row fluid className="gx-0">
-                            <Post postData={props.postData} uname={props.user.profile.uname} pid={pid} uid={props.user.uid}></Post>
+                            <Post content={post.content} uname={post.postedByName} likes={post.likes} comments={post.comments} reposts={post.reposts} pid={pid} fid={post.postedBy} uid={auth.currentUser?.uid}createdDate={post.createdDate} />
                         </Row>
                     );
                 })}

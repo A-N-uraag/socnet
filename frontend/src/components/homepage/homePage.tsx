@@ -5,23 +5,19 @@ import FeedComponent from "../feedComponent/FeedComponent";
 import ProfilePage from "../profilePage/profilePage";
 import UserProfile from "../userPage/userPage";
 
-let userData = require("../../assets/data/users.json");
-let postData = require("../../assets/data/posts.json");
-
-const Homepage = (props: any) => {
+const Homepage = () => {
     const [switchParam, setSwitchParam] = useState<string>("home");
-    const [user, setUser] = useState<number>(-1);
     
     const renderSwitch = (param: string) => {
         switch(param) {
             case "home":
-                return <FeedComponent userData={userData} postData={postData} uid={props.uid} paramCallback={setSwitchParam} userCallback={setUser}/>;
+                return <FeedComponent />;
             case "profile":
-                return <ProfilePage user={userData[props.uid]} postData={postData} uid={props.uid}/>;
+                return <ProfilePage/>;
             case "user":
-                return <UserProfile vid={props.uid} fid={user} user={userData[user]} postData={props.postData} uid={user}/>;
+                return <UserProfile />;
             default:
-                return <FeedComponent userData={userData} postData={postData} uid={props.uid}/>;
+                return <FeedComponent />;
         };
     };
     return(

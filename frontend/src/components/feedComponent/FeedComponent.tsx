@@ -4,14 +4,13 @@ import Post from "../Post/Posts";
 import { auth } from "../../firebase/firebase";
 import { ClimbingBoxLoader } from "react-spinners";
 
-
 const override = `
   display: block;
   margin: 25% auto;
   border-color: red;
 `;
 
-const FeedComponent = (props: any) => {
+const FeedComponent = () => {
     const [postText, setPostText] = useState<string>("");
     const [posts, setPosts] = useState<any>({});
     
@@ -43,7 +42,7 @@ const FeedComponent = (props: any) => {
                                 <Row fluid>
                                     <Col fluid xs={4} md={2}>
                                         <Image
-                                                src={props.userData[props.uid].profile.photoURL}
+                                                src={"img/ramam.jpeg"}
                                                 roundedCircle
                                                 fluid
                                         />
@@ -87,13 +86,13 @@ const FeedComponent = (props: any) => {
                             </Container>
                         </Card.Body>
                     </Card>
-                    <ClimbingBoxLoader color="#332FD0" size={20} css={override} loading={Object.keys(posts).length==0}/>
                 </Row>
+                <ClimbingBoxLoader color="#332FD0" size={20} css={override} loading={Object.keys(posts).length===0}/>
                 {Object.keys(posts).map((pid: string) => {   
                     const post:any = posts[pid];
                     return (
                         <Row fluid className="gx-0">
-                            <Post content={post.content} uname={post.postedByName} likes={post.likes} comments={post.comments} reposts={post.reposts} pid={pid} fid={post.postedBy} uid={auth.currentUser?.uid}createdDate={post.createdDate} paramCallback={props.paramCallback} userCallback={props.userCallback} />
+                            <Post content={post.content} uname={post.postedByName} likes={post.likes} comments={post.comments} reposts={post.reposts} pid={pid} fid={post.postedBy} uid={auth.currentUser?.uid}createdDate={post.createdDate} />
                         </Row>
                     );
                 })}

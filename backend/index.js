@@ -9,7 +9,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.post('/createUser', (req, res) => {
-    console.log(req.body);
     const newProfile = {
         uname: req.body.uname || '',
         dob: req.body.dob || '',
@@ -32,7 +31,6 @@ app.post('/createUser', (req, res) => {
 });
 
 app.post('/createPost', (req, res) => {
-    console.log(req.body);
     var userName;
     db.collection('users').doc(req.body.email).get()
     .then((doc) => {
@@ -65,8 +63,7 @@ app.post('/createPost', (req, res) => {
 });
 
 app.get('/getUser', (req, res) => {
-    console.log(req.body);
-    db.collection('users').doc(req.body.email).get()
+    db.collection('users').doc(req.query.email).get()
     .then((doc) => {
         res.json(doc.data());
     });

@@ -34,16 +34,11 @@ const Post = (props: any) => {
         }
         setShow(false);
     };
-    const triggerEvent = () => {
-        props.userCallback(props.fid);
-        props.paramCallback("user");
-    };
-    
     return (
         <Card className="my-1">
             <Card.Body>
                 <Card.Subtitle> 
-                    <p style={{display: "inline-block"}} onClick={triggerEvent}> 
+                    <p style={{display: "inline-block"}}> 
                         {props.uname}
                     </p>
                     <FontAwesomeIcon className={"mx-2"}  size="xs" style={{display: "inline-block"}} icon={faDotCircle} /> 
