@@ -1,17 +1,16 @@
 import { Container, Row, Col } from "react-bootstrap";
-import FeedComponent from "../feedComponent/FeedComponent";
 import NavComponent from "../navComponent/navComponent";
+import "./chatComponent.css";
 
-const Homepage = () => {
-    
-    return(
+const ChatComponent = () => {
+    return (
         <>
             <NavComponent />
-            <Container className="mt-3 justify-content-center" fluid>
-                <Row fluid>
+            <Container fluid="true">
+                <Row fluid="true" className="gx-0">
                     <Col xs={0} md={3}></Col>
                     <Col fluid xs={12} md={6}>
-                        <FeedComponent />
+                        <h1>Coming Soon</h1>
                     </Col>
                     <Col xs={0} md={3}></Col>
                 </Row>
@@ -20,4 +19,4 @@ const Homepage = () => {
     );
 };
 
-export default Homepage;
+export default ChatComponent;

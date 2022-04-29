@@ -5,6 +5,7 @@ import HomePage from "./components/homepage/homePage";
 import CreateProfile from "./components/createProfile/createProfile";
 import AuthWrapper from "./requireAuth";
 import UserProfilePage from "./components/userPage/userPage";
+import ProfilePage from "./components/profilePage/profilePage";
 
 class AppRouter extends React.Component {
     render() {
@@ -17,6 +18,9 @@ class AppRouter extends React.Component {
                     } />
                     <Route path="home" element={
                         <AuthWrapper Component={<HomePage/>}/>
+                    } />
+                    <Route path="myprofile" element={
+                        <AuthWrapper Component={<ProfilePage/>}/>
                     } />
                     <Route path="user/:userId" element={<UserProfilePage />} />
                 </Routes>
