@@ -64,6 +64,14 @@ app.post('/createPost', (req, res) => {
     });
 });
 
+app.get('/getUser', (req, res) => {
+    console.log(req.body);
+    db.collection('users').doc(req.body.email).get()
+    .then((doc) => {
+        res.json(doc.data());
+    });
+});
+
 app.post('/generateFeed', (req, res) => {
     const userId = req.body.userId;
     db.collection('users').doc(userId).get().then((doc) => {
@@ -80,7 +88,7 @@ app.post('/generateFeed', (req, res) => {
     });
 });
 
-app.get('/getPosts', async (req, res) => {
+app.post('/getPosts', async (req, res) => {
     const idList = req.body.idList || [];
     posts = {};
     await Promise.all(idList.map(async (id) => {
