@@ -43,6 +43,7 @@ const ProfilePage = () => {
         });
     }, []);
 
+    console.log(posts);
     return (
         <>
             <NavComponent />
@@ -51,7 +52,7 @@ const ProfilePage = () => {
                     <Col xs={0} md={3}></Col>
                     <Col fluid xs={12} md={6}>
                         <Card>
-                            <Card.Img variant="top" style={imgLoaded ? {width:"50%",margin:"0px auto"} : {display: 'none'}} src={"https://avatars.dicebear.com/api/bottts/"+auth.currentUser?.email+".svg?colorful=1"}  onLoad={() => setImgLoaded(true)} />
+                            <Card.Img variant="top" style={imgLoaded ? {width:"30%",margin:"0px auto"} : {display: 'none'}} src={"https://avatars.dicebear.com/api/bottts/"+auth.currentUser?.email+".svg?colorful=1"}  onLoad={() => setImgLoaded(true)} />
                             <Card.Body>
                                 <Card.Title>{user.uname}</Card.Title>
                                 <Card.Subtitle> <p className="text-secondary"> {auth.currentUser?.email} </p> </Card.Subtitle>
@@ -61,7 +62,7 @@ const ProfilePage = () => {
                                             <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faLocationDot} /> <p style={{display: "inline-block"}}>{user.location ? user.location : "Zombieland"}</p>
                                         </Col>
                                         <Col fluid="true" sm={3}>
-                                            <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faLink} /> <a href={user.website ? user.website : "https://google.co.in"} style={{display: "inline-block", color: "#332FD0"}}>Homepage</a>
+                                            <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faLink} /> <a href={user.website ? user.website : "https://google.co.in"} style={{display: "inline-block", color: "#332FD0"}}>Website</a>
                                         </Col>
                                         <Col fluid="true" sm={3}>
                                             <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faCakeCandles} /> <p style={{display: "inline-block"}}>{Moment(user.dob).format('LL')}</p>
@@ -98,7 +99,7 @@ const ProfilePage = () => {
                     <Col xs={0} md={3}></Col>
                 </Row>
                 <ClimbingBoxLoader color="#332FD0" size={20} css={override} loading={posts==="null"}/>
-                {posts && Object.keys(posts).reverse().map((pid: string) => {   
+                {typeof posts === 'object' && Object.keys(posts).reverse().map((pid: string) => {   
                     const post:any = posts[pid];
                     console.log(posts);
                     return (

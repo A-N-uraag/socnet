@@ -87,7 +87,7 @@ const FeedComponent = () => {
                     </Card>
                 </Row>
                 <ClimbingBoxLoader color="#332FD0" size={20} css={override} loading={posts==="null"}/>
-                {posts && Object.keys(posts).map((pid: string) => {   
+                {typeof posts === 'object' && Object.keys(posts).map((pid: string) => {   
                     const post:any = posts[pid];
                     return (
                         <Row key={pid} fluid="true" className="gx-0">
