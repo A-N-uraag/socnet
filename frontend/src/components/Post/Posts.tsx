@@ -8,11 +8,10 @@ import { useState } from "react";
 const Post = (props: any) => {
     Moment.locale('en');
     const [likeClicked, setLikeClicked] = useState<boolean>(false);
-    const [likes, setLikes] = useState<number>(props.postData[props.pid].likes);
+    const [likes, setLikes] = useState<number>(props.likes);
     const [show, setShow] = useState<boolean>(false);
     const [comment, setComment] = useState<string>("");
-    const [commented, setCommented] = useState<boolean>(props.postData[props.pid].comments.some((comment: any) => comment.uid === props.uid));
-    const [repostClicked, setRepostClicked] = useState<boolean>(false);
+    const commented:any = props.comments.some((comment: any) => comment.uid === props.uid);
     const onLikeClick = () => {
         likeClicked ? setLikes(likes-1) : setLikes(likes+1);
         setLikeClicked(!likeClicked);
@@ -36,10 +35,10 @@ const Post = (props: any) => {
         setShow(false);
     };
     const triggerEvent = () => {
-        console.log("Hello")
         props.userCallback(props.fid);
         props.paramCallback("user");
     };
+    
     return (
         <Card className="my-1">
             <Card.Body>
@@ -48,10 +47,10 @@ const Post = (props: any) => {
                         {props.uname}
                     </p>
                     <FontAwesomeIcon className={"mx-2"}  size="xs" style={{display: "inline-block"}} icon={faDotCircle} /> 
-                    <p className="text-secondary" style={{display: "inline-block", color: "secondary"}}> {Moment(props.postData[props.pid].createdDate).format('LL')} </p>
+                    <p className="text-secondary" style={{display: "inline-block", color: "secondary"}}> {Moment(props.createdDate).format('LL')} </p>
                 </Card.Subtitle>
                 <Card.Text className="">
-                    {props.postData[props.pid].content}
+                    {props.content}
                 </Card.Text>
             </Card.Body>
             <Card.Footer className="py-0 my-0">
@@ -60,7 +59,7 @@ const Post = (props: any) => {
                         {likeClicked ? ([<FontAwesomeIcon onClick={onLikeClick}  size="xs" style={{display: "inline-block"}} icon={faHeart} />, <i style={{display: "inline-block"}}>{likes}</i>]) : ([<FontAwesomeIcon onClick={onLikeClick} size="xs" style={{display: "inline-block"}} icon={faRHeart} />, <i style={{display: "inline-block"}}>{likes}</i>])}
                     </Col>
                     <Col fluid>
-                        {commented ? ([<FontAwesomeIcon  onClick={onCommentClick} size="xs" style={{display: "inline-block"}} icon={faComment} />, <i style={{display: "inline-block"}}>{props.postData[props.pid].comments.length}</i>]):([<FontAwesomeIcon onClick={onCommentClick} size="xs" style={{display: "inline-block"}} icon={faRComment} />, <i style={{display: "inline-block"}}>{props.postData[props.pid].comments.length}</i>])}
+                        {commented ? ([<FontAwesomeIcon  onClick={onCommentClick} size="xs" style={{display: "inline-block"}} icon={faComment} />, <i style={{display: "inline-block"}}>{props.comments.length}</i>]):([<FontAwesomeIcon onClick={onCommentClick} size="xs" style={{display: "inline-block"}} icon={faRComment} />, <i style={{display: "inline-block"}}>{props.length}</i>])}
                         <Modal show={show} onHide={handleClose}>
                             <Modal.Header closeButton>
                             <Modal.Title>Comment</Modal.Title>
@@ -84,7 +83,7 @@ const Post = (props: any) => {
                         </Modal>
                     </Col>
                     <Col fluid>
-                        <FontAwesomeIcon  size="xs" style={{display: "inline-block"}} icon={faRetweet} /> <i style={{display: "inline-block"}}>{props.postData[props.pid].reposts}</i>
+                        <FontAwesomeIcon  size="xs" style={{display: "inline-block"}} icon={faRetweet} /> <i style={{display: "inline-block"}}>{props.reposts}</i>
                     </Col>
                     <Col fluid>
                         <FontAwesomeIcon  size="xs" style={{display: "inline-block"}} icon={faShare} />

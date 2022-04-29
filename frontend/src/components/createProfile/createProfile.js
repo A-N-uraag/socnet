@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../../firebase/firebase';
 import "./createProfile.scss";
 import { ParticlesContainer } from './particlesBG';
 
 function CreateProfile() {
-    const {state} = useLocation();
     const navigate = useNavigate();
-    const userEmail = state.userEmail;
+    const userEmail = auth.currentUser.id;
     const [userName, setUserName] = useState("");
     const [dob, setDob] = useState("");
     const [bio, setBio] = useState("");
@@ -95,9 +95,6 @@ function CreateProfile() {
                     </button>
                 </form>
             </div>
-            <script>
-                VANTA.WAVES('#background')
-            </script>
         </div>
     );
 }

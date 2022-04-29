@@ -33,6 +33,11 @@ app.post('/createUser', (req, res) => {
 
 app.post('/createPost', (req, res) => {
     console.log(req.body);
+    var userName;
+    db.collection('users').doc(req.body.email).get()
+    .then((doc) => {
+        userName = doc.data().uname;
+    });
     const newPost = {
         content: req.body.content || '',
         createdDate: new Date().toISOString(),
@@ -40,7 +45,8 @@ app.post('/createPost', (req, res) => {
         comments: [],
         reposts: 0,
         noOfReports: 0,
-        postedBy: req.body.email || ''
+        postedBy: req.body.email || '',
+        postedByName: userName || ''
     };
     var docId;
     db.collection('posts').add(newPost)
@@ -55,6 +61,22 @@ app.post('/createPost', (req, res) => {
     })
     .then((resp)=>{
         res.json(resp);
+    });
+});
+
+app.post('/generateFeed', (req, res) => {
+    const userId = req.body.userId;
+    db.collection('users').doc(userId).get().then((doc) => {
+        if(doc.exists) {
+            const following = doc.data().following;
+            return db.collection('posts').where('postedBy', 'in', following).orderBy('createdDate', 'desc').limit(30).get();
+        }
+    }).then((querySnapshot) => {
+        const posts = {};
+        querySnapshot.forEach((doc) => {
+            posts[doc.id] = doc.data();
+        });
+        res.json(posts);
     });
 });
 
@@ -120,20 +142,6 @@ app.post('/unfollowUser', (req, res) => {
                 message: `user ${userId} unfollowed`
             });
         });
-    });
-});
-
-app.post('/generateFeed', (req, res) => {
-    const userId = req.body.userId;
-    db.collection('users').doc(userId).get().then((doc) => {
-        const following = doc.data().following;
-        return db.collection('posts').where('postedBy', 'in', following).orderBy('createdDate', 'desc').limit(30).get();
-    }).then((querySnapshot) => {
-        const posts = {};
-        querySnapshot.forEach((doc) => {
-            posts[doc.id] = doc.data();
-        });
-        res.json(posts);
     });
 });
 

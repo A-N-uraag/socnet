@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Container, Row, Col, Nav } from "react-bootstrap";
 import { auth } from "../../firebase/firebase";
 import FeedComponent from "../feedComponent/FeedComponent";
-import Post from "../Post/Posts";
 import ProfilePage from "../profilePage/profilePage";
 import UserProfile from "../userPage/userPage";
 

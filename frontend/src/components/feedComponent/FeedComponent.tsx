@@ -2,25 +2,34 @@ import { useEffect, useState } from "react";
 import { Card, Col, Container, Row, Image, Form, Button } from "react-bootstrap";
 import Post from "../Post/Posts";
 import { auth } from "../../firebase/firebase";
+import { ClimbingBoxLoader } from "react-spinners";
+
+
+const override = `
+  display: block;
+  margin: 25% auto;
+  border-color: red;
+`;
 
 const FeedComponent = (props: any) => {
     const [postText, setPostText] = useState<string>("");
-    var posts = {};
+    const [posts, setPosts] = useState<any>({});
+    
     useEffect(() => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: auth.currentUser?.email})
+            body: JSON.stringify({ "userId":"mara@gmail.com"})
         };
         console.log(requestOptions.body);
         fetch('https://socnet-swe.herokuapp.com/generateFeed', requestOptions)
-        .then((response) => {
-            console.log("hello");
-            console.log({response});
-            posts = response;
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            setPosts(data);
         });
     }, []);
-    console.log(props.uid);
+
     const onPostCaptionWrite = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPostText(event.target.value);
     }
@@ -48,7 +57,7 @@ const FeedComponent = (props: any) => {
                                                     'Content-Type': 'application/json'
                                                 },
                                                 body: JSON.stringify({
-                                                    user: auth.currentUser?.email,
+                                                    email: auth.currentUser?.email,
                                                     content: postText
                                                 })
                                             };
@@ -78,8 +87,16 @@ const FeedComponent = (props: any) => {
                             </Container>
                         </Card.Body>
                     </Card>
+                    <ClimbingBoxLoader color="#332FD0" size={20} css={override} loading={Object.keys(posts).length==0}/>
                 </Row>
-                
+                {Object.keys(posts).map((pid: string) => {   
+                    const post:any = posts[pid];
+                    return (
+                        <Row fluid className="gx-0">
+                            <Post content={post.content} uname={post.postedByName} likes={post.likes} comments={post.comments} reposts={post.reposts} pid={pid} fid={post.postedBy} uid={auth.currentUser?.uid}createdDate={post.createdDate} paramCallback={props.paramCallback} userCallback={props.userCallback} />
+                        </Row>
+                    );
+                })}
             </Container>
         </>
     );
