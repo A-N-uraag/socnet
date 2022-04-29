@@ -12,13 +12,13 @@ const override = `
 
 const FeedComponent = () => {
     const [postText, setPostText] = useState<string>("");
-    const [posts, setPosts] = useState<any>({});
+    const [posts, setPosts] = useState<any>("null");
     
     useEffect(() => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ "userId":"mara@gmail.com"})
+            body: JSON.stringify({ "userId":auth.currentUser?.email})
         };
         console.log(requestOptions.body);
         fetch('https://socnet-swe.herokuapp.com/generateFeed', requestOptions)
@@ -42,8 +42,7 @@ const FeedComponent = () => {
                                 <Row fluid="true">
                                     <Col fluid="true" xs={4} md={2}>
                                         <Image
-                                                src={"img/ramam.jpeg"}
-                                                roundedCircle
+                                                src={"https://avatars.dicebear.com/api/bottts/"+auth.currentUser?.email+".svg?colorful=1"}
                                                 fluid={true}
                                         />
                                     </Col>
@@ -61,11 +60,12 @@ const FeedComponent = () => {
                                                 })
                                             };
                                             fetch('https://socnet-swe.herokuapp.com/createPost', requestOptions)
-                                            .then(response => response.json())
-                                            .then(response => {
-                                                if (response.status === 200) {
+                                            .then(response => Promise.all([response.status,response.json()]))
+                                            .then(([status,response]) => {
+                                                if(status === 200){
                                                     window.location.reload();
                                                 }
+                                                console.log(response);
                                             });
                                         }}>
                                             <Form.Group controlId="postWriting">
@@ -86,8 +86,8 @@ const FeedComponent = () => {
                         </Card.Body>
                     </Card>
                 </Row>
-                <ClimbingBoxLoader color="#332FD0" size={20} css={override} loading={Object.keys(posts).length===0}/>
-                {Object.keys(posts).map((pid: string) => {   
+                <ClimbingBoxLoader color="#332FD0" size={20} css={override} loading={posts==="null"}/>
+                {typeof posts === 'object' && Object.keys(posts).map((pid: string) => {   
                     const post:any = posts[pid];
                     return (
                         <Row key={pid} fluid="true" className="gx-0">
@@ -95,6 +95,7 @@ const FeedComponent = () => {
                         </Row>
                     );
                 })}
+                {Object.keys(posts).length===0 && <div style={{marginTop:"10%"}} className="text-secondary centerAlign">No posts yet!<br/>Head to the HomePage and post something!</div>}
             </Container>
         </>
     );
