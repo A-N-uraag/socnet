@@ -67,7 +67,7 @@ app.get('/getUser', (req, res) => {
     db.collection('users').doc(req.query.email).get()
     .then((doc) => {
         if(!doc.exists){
-            res.sendStatus(404);
+            res.status(404).json({ error: 'user does not exist' });
         }
         res.json(doc.data());
     });
