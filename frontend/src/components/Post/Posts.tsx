@@ -14,24 +14,26 @@ const Post = (props: any) => {
     const [comment, setComment] = useState<string>("");
     const commented:any = props.comments ? props.comments.some((comment: any) => comment.uid === props.uid) : false;
     const onLikeClick = () => {
-        if(!likeClicked) {
-            const requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ "postId":props.pid,"email":auth.currentUser?.email })
-            };
-            fetch('https://socnet-swe.herokuapp.com/likePost', requestOptions);
+        if(auth.currentUser !== null){
+            if(!likeClicked) {
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ "postId":props.pid,"email":auth.currentUser?.email })
+                };
+                fetch('https://socnet-swe.herokuapp.com/likePost', requestOptions);
+            }
+            else{
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ "postId":props.pid,"email":auth.currentUser?.email })
+                };
+                fetch('https://socnet-swe.herokuapp.com/unlikePost', requestOptions);
+            }
+            setLikeClicked(!likeClicked);
+            setLikes(likeClicked ? likes - 1 : likes + 1);
         }
-        else{
-            const requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ "postId":props.pid,"email":auth.currentUser?.email })
-            };
-            fetch('https://socnet-swe.herokuapp.com/unlikePost', requestOptions);
-        }
-        setLikeClicked(!likeClicked);
-        setLikes(likeClicked ? likes - 1 : likes + 1);
     };
     const onCommentChange = (event: any) => {
         setComment(event.target.value);

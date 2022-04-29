@@ -9,3 +9,7 @@ a {
 .centerAlign{
     text-align: center;
 }
+
+.navLink {
+    font-size: 15px;
+}
