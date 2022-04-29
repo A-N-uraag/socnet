@@ -3,7 +3,8 @@ p {
 }
 
 a {
-    font-size: 10px
+    font-size: 1.25rem;
+    margin: 1rem;
 }
 
 .centerAlign{
