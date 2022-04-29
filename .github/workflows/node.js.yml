@@ -1,10 +1,12 @@
-name: Deploy
+name: Deploy Backend
 
 on:
   push:
     branches:
       - main
-      - backend-cicd
+    paths:
+      - backend/**
+  workflow_dispatch:
 
 jobs:
   build:

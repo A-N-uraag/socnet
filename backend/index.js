@@ -22,7 +22,7 @@ app.post('/createUser', (req, res) => {
     };
     db.collection('users').doc(req.body.email).set(newProfile).then((doc) => {
         res.json({
-            message: `user ${req.body.email} created successfully`
+            "message": `user ${req.body.email} created successfully`
         });
     })
     .catch((err) => {
@@ -74,6 +74,8 @@ app.post('/generateFeed', (req, res) => {
     db.collection('users').doc(userId).get().then((doc) => {
         if(doc.exists) {
             const following = doc.data().following;
+            if(following.length == 0)
+                following.push(userId);
             return db.collection('posts').where('postedBy', 'in', following).orderBy('createdDate', 'desc').limit(30).get();
         }
     }).then((querySnapshot) => {
@@ -102,7 +104,7 @@ app.post('/likePost', (req, res) => {
         likes: admin.admin.firestore.FieldValue.arrayUnion(req.body.email)
     }).then(() => {
         res.json({
-            message: `post ${postId} liked`
+            "message": `post ${postId} liked`
         });
     });
 });
@@ -113,7 +115,7 @@ app.post('/unlikePost', (req, res) => {
         likes: admin.admin.firestore.FieldValue.arrayRemove(req.body.email)
     }).then(() => {
         res.json({
-            message: `post ${postId} unliked`
+            "message": `post ${postId} unliked`
         });
     });
 });
@@ -128,7 +130,7 @@ app.post('/followUser', (req, res) => {
             following: admin.admin.firestore.FieldValue.arrayUnion(userId)
         }).then(() => {
             res.json({
-                message: `user ${userId} followed`
+                "message": `user ${userId} followed`
             });
         });
     });
@@ -144,7 +146,7 @@ app.post('/unfollowUser', (req, res) => {
             following: admin.admin.firestore.FieldValue.arrayRemove(userId)
         }).then(() => {
             res.json({
-                message: `user ${userId} unfollowed`
+                "message": `user ${userId} unfollowed`
             });
         });
     });
@@ -161,7 +163,7 @@ app.post('/unfollowUser', (req, res) => {
 //                 postData.comments.push(req.body.comment);
 //                 postRef.update(postData).then(() => {
 //                     return res.json({
-//                         message: `comment added successfully`
+//                         "message": `comment added successfully`
 //                     });
 //                 });
 //             }
@@ -181,7 +183,7 @@ app.post('/unfollowUser', (req, res) => {
 //                 postData.reposts++;
 //                 postRef.update(postData).then(() => {
 //                     return res.json({
-//                         message: `post ${postId} reposted successfully`
+//                         "message": `post ${postId} reposted successfully`
 //                     });
 //                 });
 //             }
@@ -201,7 +203,7 @@ app.post('/unfollowUser', (req, res) => {
 //                 postData.noOfReports++;
 //                 postRef.update(postData).then(() => {
 //                     return res.json({
-//                         message: `post ${postId} reported successfully`
+//                         "message": `post ${postId} reported successfully`
 //                     });
 //                 });
 //             }
@@ -220,7 +222,7 @@ app.post('/unfollowUser', (req, res) => {
 //                 const postData = doc.data();
 //                 postRef.delete().then(() => {
 //                     return res.json({
-//                         message: `post ${postId} deleted successfully`
+//                         "message": `post ${postId} deleted successfully`
 //                     });
 //                 });
 //             }
