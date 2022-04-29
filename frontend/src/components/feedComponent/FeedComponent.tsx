@@ -34,20 +34,20 @@ const FeedComponent = () => {
     }
     return (
         <>
-            <Container fluid>
-                <Row fluid className="gx-0">
+            <Container fluid="true">
+                <Row fluid="true" className="gx-0">
                     <Card className="mb-1">
                         <Card.Body>
-                            <Container fluid>
-                                <Row fluid>
-                                    <Col fluid xs={4} md={2}>
+                            <Container fluid="true">
+                                <Row fluid="true">
+                                    <Col fluid="true" xs={4} md={2}>
                                         <Image
                                                 src={"img/ramam.jpeg"}
                                                 roundedCircle
-                                                fluid
+                                                fluid={true}
                                         />
                                     </Col>
-                                    <Col fluid>
+                                    <Col fluid="true">
                                         <Form onSubmit={(e)=>{
                                             e.preventDefault();
                                             const requestOptions = {
@@ -60,14 +60,13 @@ const FeedComponent = () => {
                                                     content: postText
                                                 })
                                             };
-                                            console.log(requestOptions.body);
                                             fetch('https://socnet-swe.herokuapp.com/createPost', requestOptions)
-                                                .then(response => {
-                                                    console.log(response);
-                                                    if (response.status === 200) {
-                                                        window.location.reload();
-                                                    }
-                                                });
+                                            .then(response => response.json())
+                                            .then(response => {
+                                                if (response.status === 200) {
+                                                    window.location.reload();
+                                                }
+                                            });
                                         }}>
                                             <Form.Group controlId="postWriting">
                                                 <Form.Control className="border-0" value={postText} onChange={onPostCaptionWrite} as="textarea" rows={3} placeholder="What's happening?"/>
@@ -91,7 +90,7 @@ const FeedComponent = () => {
                 {Object.keys(posts).map((pid: string) => {   
                     const post:any = posts[pid];
                     return (
-                        <Row fluid className="gx-0">
+                        <Row key={pid} fluid="true" className="gx-0">
                             <Post content={post.content} uname={post.postedByName} likes={post.likes} comments={post.comments} reposts={post.reposts} pid={pid} fid={post.postedBy} uid={auth.currentUser?.uid}createdDate={post.createdDate} />
                         </Row>
                     );

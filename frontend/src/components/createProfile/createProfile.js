@@ -28,6 +28,7 @@ function CreateProfile() {
                     };
                     console.log(requestOptions.body);
                     fetch('https://socnet-swe.herokuapp.com/createUser', requestOptions)
+                    .then(response => response.json())
                     .then(response => {
                         console.log(response);
                         if (response.status === 200) {

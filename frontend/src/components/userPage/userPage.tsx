@@ -1,56 +1,88 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faLink, faCakeCandles, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
-import { Card, Container, Row, Col, Button } from "react-bootstrap";
+import { Card, Container, Row, Col, Button, Nav } from "react-bootstrap";
 import Moment from "moment";
 import "./userPage.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Post from "../Post/Posts";
+import { auth } from "../../firebase/firebase";
+import { ClimbingBoxLoader } from "react-spinners";
+import { useParams } from "react-router-dom";
+import FeedComponent from "../feedComponent/FeedComponent";
+import ProfilePage from "../profilePage/profilePage";
 
-const UserProfile = (props: any) => {
+const override = `
+  display: block;
+  margin: 25% auto;
+  border-color: red;
+`;
+
+const UserProfile = () => {
+    const { userId } = useParams();
     const [imgLoaded, setImgLoaded] = useState<boolean>(false);
-    const [following, setFollowing] = useState<boolean>(props.user.followers.includes(props.vid));
-    const handleEdge = () => {
-        setFollowing(!following);
-    };
-    console.log(props.user);
-    return(
+    const [user, setUser] = useState<any>({})
+    const [posts, setPosts] = useState<any>("null")
+
+    useEffect(() => {
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+        fetch('https://socnet-swe.herokuapp.com/getUser?email=' + userId, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            setUser(data);
+            const postsRequestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "idList":data.posts })
+            };
+            fetch('https://socnet-swe.herokuapp.com/getPosts?', postsRequestOptions)
+            .then(response => response.json())
+            .then(data => {
+                setPosts(data);
+            });
+        });
+    }, [userId]);
+
+    return (
         <>
-            <Container fluid>
-                <Row fluid className="gx-0">
+            <Container fluid="true">
+                <Row fluid="true" className="gx-0">
                     <Card>
-                        <Card.Img variant="top" style={imgLoaded ? {} : {display: 'none'}} src={props.user.profile.photoURL}  onLoad={() => setImgLoaded(true)} />
+                        <Card.Img variant="top" style={imgLoaded ? {width:"50%",margin:"0px auto"} : {display: 'none'}} src={"https://avatars.dicebear.com/api/bottts/"+userId+".svg?colorful=1"}  onLoad={() => setImgLoaded(true)} />
                         <Card.Body>
-                            <Card.Title>{props.user.profile.name}</Card.Title>
-                            <Card.Subtitle> <p className="text-secondary"> {props.user.profile.uname} </p> </Card.Subtitle>
-                            <Container fluid>
-                                <Row fluid className="gx-0">
-                                    <Col fluid sm={3}>
-                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faLocationDot} /> <p style={{display: "inline-block"}}>{props.user.profile.location ? props.user.profile.location : "Zombieland"}</p>
+                            <Card.Title>{user.uname}</Card.Title>
+                            <Card.Subtitle> <p className="text-secondary"> {userId} </p> </Card.Subtitle>
+                            <Container fluid="true">
+                                <Row fluid="true" className="gx-0">
+                                    <Col fluid="true" sm={3}>
+                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faLocationDot} /> <p style={{display: "inline-block"}}>{user.location ? user.location : "Zombieland"}</p>
                                     </Col>
-                                    <Col fluid sm={3}>
-                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faLink} /> <a href={props.user.profile.website ? props.user.profile.website : "https://google.co.in"} style={{display: "inline-block", color: "#332FD0"}}>Homepage</a>
+                                    <Col fluid="true" sm={3}>
+                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faLink} /> <a href={user.website ? user.website : "https://google.co.in"} style={{display: "inline-block", color: "#332FD0"}}>Homepage</a>
                                     </Col>
-                                    <Col fluid sm={3}>
-                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faCakeCandles} /> <p style={{display: "inline-block"}}>{Moment(props.user.profile.dob).format('LL')}</p>
+                                    <Col fluid="true" sm={3}>
+                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faCakeCandles} /> <p style={{display: "inline-block"}}>{Moment(user.dob).format('LL')}</p>
                                     </Col>
-                                    <Col fluid sm={3}>
-                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faCalendarDays} /> <p style={{display: "inline-block"}}>{Moment(props.user.profile.createdDate).format('LL')}</p>
+                                    <Col fluid="true" sm={3}>
+                                        <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faCalendarDays} /> <p style={{display: "inline-block"}}>{Moment(user.createdDate).format('LL')}</p>
                                     </Col>
                                 </Row>
                             </Container>
-                            <Button variant={following ? "dark" : "outline-dark"} size="sm" onClick={handleEdge}>{following ? "Unfollow" : "Follow"}</Button>
+                            <Button variant="outline-dark" size="sm">Edit Profile</Button>
                         </Card.Body>
                         <Card.Footer className="py-0 my-0">
-                            <Container fluid className="gy-0 py-0 my-0">
-                                <Row fluid className="gx-0 gy-0 py-0 my-0">
-                                    <Col fluid className="py-0 my-0">
+                            <Container fluid="true" className="gy-0 py-0 my-0">
+                                <Row fluid="true" className="gx-0 gy-0 py-0 my-0">
+                                    <Col fluid="true" className="py-0 my-0">
                                         <div className="centerAlign py-0 my-0">
-                                            <b style={{display: "inline-block"}}>{props.user.followers.length}</b> <p style={{display: "inline-block"}} className="text-secondary">Followers</p>
+                                            <p style={{display: "inline-block"}} className="text-secondary">Followers: </p><p style={{display: "inline-block"}}>{user.followers ? user.followers.length : 0}</p>
                                         </div>
                                     </Col>
-                                    <Col fluid className="py-0 my-0">
+                                    <Col fluid="true" className="py-0 my-0">
                                         <div className="centerAlign py-0 my-0">
-                                            <b style={{display: "inline-block"}}>{props.user.followees.length}</b> <p style={{display: "inline-block"}} className="text-secondary">Following</p>
+                                            <p style={{display: "inline-block"}} className="text-secondary">Following: </p><p style={{display: "inline-block"}}>{user.followers ? user.following.length : 0}</p>
                                         </div>
                                     </Col>
                                 </Row>
@@ -58,16 +90,64 @@ const UserProfile = (props: any) => {
                         </Card.Footer>
                     </Card>
                 </Row>
-                {following ? props.user.posts.map((pid: number) => {
-                    return(
-                        <Row fluid className="gx-0">
-                            <Post postData={props.postData} uname={props.user.profile.uname} pid={pid} uid={props.user.uid}></Post>
+                <ClimbingBoxLoader color="#332FD0" size={20} css={override} loading={posts==="null"}/>
+                {Object.keys(posts).reverse().map((pid: string) => {   
+                    const post:any = posts[pid];
+                    return (
+                        <Row key={pid} fluid="true" className="gx-0">
+                            <Post content={post.content} uname={post.postedByName} likes={post.likes} comments={post.comments} reposts={post.reposts} pid={pid} fid={post.postedBy} uid={auth.currentUser?.uid}createdDate={post.createdDate} />
                         </Row>
                     );
-                }) : null}
+                })}
+                {Object.keys(posts).length===0 && <div style={{marginTop:"10%"}} className="text-secondary centerAlign">No posts yet!<br/>Head to the HomePage and post something!</div>}
             </Container>
         </>
     );
 };
 
-export default UserProfile;
+function UserProfilePage() {
+    const [switchParam, setSwitchParam] = useState<string>("home");
+    
+    const renderSwitch = (param: string) => {
+        switch(param) {
+            case "home":
+                return <FeedComponent />;
+            case "profile":
+                return <ProfilePage/>;
+            default:
+                return <FeedComponent />;
+        };
+    };
+    return (
+        <Container className="mt-3 justify-content-center" fluid="true">
+            <Row fluid="true">
+                <Col xs={0} md={2}></Col>
+                <Col fluid="true" xs={3} md={1}>
+                    <Nav 
+                        defaultActiveKey={switchParam}
+                        className="flex-column" 
+                        onSelect={(selectedKey) => setSwitchParam(`${selectedKey}`)}
+                    >
+                        <Nav.Link style={{color: "#332FD0"}} eventKey="home">Home</Nav.Link>
+                        <Nav.Link style={{color: "#332FD0"}} eventKey="chats">Messages</Nav.Link>
+                        <Nav.Link style={{color: "#332FD0"}} eventKey="profile">Profile</Nav.Link>
+                        <Nav.Link style={{color: "#332FD0"}} eventKey="explore"> Explore </Nav.Link>
+                    </Nav>
+                    <button onClick={(e)=>{
+                        e.preventDefault();
+                        auth.signOut();
+                    }}>
+                        Signout
+                    </button>
+                </Col>
+                <Col xs={0} md={1}></Col>
+                <Col fluid="true" xs={8} md={5}>
+                    <UserProfile />
+                </Col>
+                <Col xs={0} md={3}></Col>
+            </Row>
+        </Container>
+    );
+}
+
+export default UserProfilePage;

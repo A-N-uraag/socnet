@@ -4,17 +4,34 @@ import {faHeart as faRHeart, faComment as faRComment } from "@fortawesome/free-r
 import Moment from "moment";
 import { Card, Row, Col, Modal, Button, Form } from "react-bootstrap"; 
 import { useState } from "react";
+import { auth } from "../../firebase/firebase";
 
 const Post = (props: any) => {
     Moment.locale('en');
-    const [likeClicked, setLikeClicked] = useState<boolean>(false);
-    const [likes, setLikes] = useState<number>(props.likes);
+    const [likeClicked, setLikeClicked] = useState<boolean>(props.likes ? props.likes.includes(auth.currentUser?.email) : false);
+    const [likes, setLikes] = useState<number>(props.likes ? props.likes.length : 0);
     const [show, setShow] = useState<boolean>(false);
     const [comment, setComment] = useState<string>("");
-    const commented:any = props.comments.some((comment: any) => comment.uid === props.uid);
+    const commented:any = props.comments ? props.comments.some((comment: any) => comment.uid === props.uid) : false;
     const onLikeClick = () => {
-        likeClicked ? setLikes(likes-1) : setLikes(likes+1);
+        if(!likeClicked) {
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "postId":props.pid,"email":auth.currentUser?.email })
+            };
+            fetch('https://socnet-swe.herokuapp.com/likePost', requestOptions);
+        }
+        else{
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "postId":props.pid,"email":auth.currentUser?.email })
+            };
+            fetch('https://socnet-swe.herokuapp.com/unlikePost', requestOptions);
+        }
         setLikeClicked(!likeClicked);
+        setLikes(likeClicked ? likes - 1 : likes + 1);
     };
     const onCommentChange = (event: any) => {
         setComment(event.target.value);
@@ -41,7 +58,7 @@ const Post = (props: any) => {
                     <p style={{display: "inline-block"}}> 
                         {props.uname}
                     </p>
-                    <FontAwesomeIcon className={"mx-2"}  size="xs" style={{display: "inline-block"}} icon={faDotCircle} /> 
+                    <FontAwesomeIcon key="delimiter" className={"mx-2"}  size="xs" style={{display: "inline-block"}} icon={faDotCircle} /> 
                     <p className="text-secondary" style={{display: "inline-block", color: "secondary"}}> {Moment(props.createdDate).format('LL')} </p>
                 </Card.Subtitle>
                 <Card.Text className="">
@@ -49,12 +66,14 @@ const Post = (props: any) => {
                 </Card.Text>
             </Card.Body>
             <Card.Footer className="py-0 my-0">
-                <Row fluid>
-                    <Col fluid>
-                        {likeClicked ? ([<FontAwesomeIcon onClick={onLikeClick}  size="xs" style={{display: "inline-block"}} icon={faHeart} />, <i style={{display: "inline-block"}}>{likes}</i>]) : ([<FontAwesomeIcon onClick={onLikeClick} size="xs" style={{display: "inline-block"}} icon={faRHeart} />, <i style={{display: "inline-block"}}>{likes}</i>])}
+                <Row fluid="true">
+                    <Col fluid="true">
+                        {likeClicked ? <FontAwesomeIcon key="like" onClick={onLikeClick}  size="xs" style={{display: "inline-block"}} icon={faHeart} /> : <FontAwesomeIcon key="liked" onClick={onLikeClick} size="xs" style={{display: "inline-block"}} icon={faRHeart} />}
+                        <i style={{display: "inline-block"}}>{likes}</i>
                     </Col>
-                    <Col fluid>
-                        {commented ? ([<FontAwesomeIcon  onClick={onCommentClick} size="xs" style={{display: "inline-block"}} icon={faComment} />, <i style={{display: "inline-block"}}>{props.comments.length}</i>]):([<FontAwesomeIcon onClick={onCommentClick} size="xs" style={{display: "inline-block"}} icon={faRComment} />, <i style={{display: "inline-block"}}>{props.length}</i>])}
+                    <Col fluid="true">
+                        {commented ? <FontAwesomeIcon key="comment" onClick={onCommentClick} size="xs" style={{display: "inline-block"}} icon={faComment} /> : <FontAwesomeIcon key="commented" onClick={onCommentClick} size="xs" style={{display: "inline-block"}} icon={faRComment} />}
+                        <i style={{display: "inline-block"}}>{props.comments ? props.comments.length : 0}</i>
                         <Modal show={show} onHide={handleClose}>
                             <Modal.Header closeButton>
                             <Modal.Title>Comment</Modal.Title>
@@ -77,11 +96,11 @@ const Post = (props: any) => {
                             </Modal.Footer>
                         </Modal>
                     </Col>
-                    <Col fluid>
-                        <FontAwesomeIcon  size="xs" style={{display: "inline-block"}} icon={faRetweet} /> <i style={{display: "inline-block"}}>{props.reposts}</i>
+                    <Col fluid="true">
+                        <FontAwesomeIcon key="share" size="xs" style={{display: "inline-block"}} icon={faRetweet} /> <i style={{display: "inline-block"}}>{props.reposts}</i>
                     </Col>
-                    <Col fluid>
-                        <FontAwesomeIcon  size="xs" style={{display: "inline-block"}} icon={faShare} />
+                    <Col fluid="true">
+                        <FontAwesomeIcon key="share" size="xs" style={{display: "inline-block"}} icon={faShare} />
                     </Col>
                 </Row>
             </Card.Footer>
