@@ -35,30 +35,30 @@ app.post('/createPost', (req, res) => {
     db.collection('users').doc(req.body.email).get()
     .then((doc) => {
         userName = doc.data().uname;
-    });
-    const newPost = {
-        content: req.body.content || '',
-        createdDate: new Date().toISOString(),
-        likes: 0,
-        comments: [],
-        reposts: 0,
-        noOfReports: 0,
-        postedBy: req.body.email || '',
-        postedByName: userName || ''
-    };
-    var docId;
-    db.collection('posts').add(newPost)
-    .then((docu) => {
-        docId = docu.id;
-        return db.collection('users').doc(req.body.email).update({
-            posts: admin.admin.firestore.FieldValue.arrayUnion(docu.id)
+        const newPost = {
+            content: req.body.content || '',
+            createdDate: new Date().toISOString(),
+            likes: [],
+            comments: [],
+            reposts: 0,
+            noOfReports: 0,
+            postedBy: req.body.email || '',
+            postedByName: userName || ''
+        };
+        var docId;
+        db.collection('posts').add(newPost)
+        .then((docu) => {
+            docId = docu.id;
+            return db.collection('users').doc(req.body.email).update({
+                posts: admin.admin.firestore.FieldValue.arrayUnion(docu.id)
+            });
+        })
+        .then((res) => {
+            return {res:res,doc:docId};
+        })
+        .then((resp)=>{
+            res.json(resp);
         });
-    })
-    .then((res) => {
-        return {res:res,doc:docId};
-    })
-    .then((resp)=>{
-        res.json(resp);
     });
 });
 
@@ -99,7 +99,7 @@ app.post('/getPosts', async (req, res) => {
 app.post('/likePost', (req, res) => {
     const postId = req.body.postId;
     db.collection('posts').doc(postId).update({
-        likes: admin.admin.firestore.FieldValue.increment(1)
+        likes: admin.admin.firestore.FieldValue.arrayUnion(req.body.email)
     }).then(() => {
         res.json({
             message: `post ${postId} liked`
@@ -110,7 +110,7 @@ app.post('/likePost', (req, res) => {
 app.post('/unlikePost', (req, res) => {
     const postId = req.body.postId;
     db.collection('posts').doc(postId).update({
-        likes: admin.admin.firestore.FieldValue.increment(-1)
+        likes: admin.admin.firestore.FieldValue.arrayRemove(req.body.email)
     }).then(() => {
         res.json({
             message: `post ${postId} unliked`
