@@ -6,11 +6,10 @@ import { ParticlesContainer } from './particlesBG';
 
 function CreateProfile() {
     const navigate = useNavigate();
-    const userEmail = auth.currentUser.id;
+    const userEmail = auth.currentUser.email;
     const [userName, setUserName] = useState("");
     const [dob, setDob] = useState("");
     const [bio, setBio] = useState("");
-    const [selectedImage, setSelectedImage] = useState(null);
     const [website, setWebsite] = useState("");
     const [location, setLocation] = useState("");
 
@@ -28,11 +27,14 @@ function CreateProfile() {
                     };
                     console.log(requestOptions.body);
                     fetch('https://socnet-swe.herokuapp.com/createUser', requestOptions)
-                    .then(response => response.json())
-                    .then(response => {
+                    .then(response => Promise.all([response.status,response.json()]))
+                    .then(([status,response]) => {
                         console.log(response);
-                        if (response.status === 200) {
+                        if (status === 200) {
                             navigate('/home');
+                        }
+                        else{
+                            console.log("Error");
                         }
                     });
                     e.preventDefault();
@@ -70,26 +72,6 @@ function CreateProfile() {
                         value={bio}
                         onChange={(value) => setBio(value.target.value)}>
                     </textarea>
-                    <span style={{marginTop:"5px",marginRight:"40%",color: "#332FD0"}}><b>Profile Picture:</b></span>
-                    {selectedImage && (
-                        <div>
-                        <img alt="not fount" width={"250px"} src={URL.createObjectURL(selectedImage)} />
-                        <br />
-                        <button onClick={()=>setSelectedImage(null)}>Remove</button>
-                        </div>
-                    )}
-                    <input
-                        type="file"
-                        name="myImage"
-                        style={{display: "inline"}}
-                        onChange={(event) => {
-                            if(event.target.files && event.target.files.length > 0) {
-                                console.log(event.target.files[0]);
-                                setSelectedImage(event.target.files[0]);
-                            }
-                        }}
-                    />
-                    
                     <button
                         className="create-account">
                         Create Account

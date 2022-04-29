@@ -12,6 +12,7 @@ app.post('/createUser', (req, res) => {
     const newProfile = {
         uname: req.body.uname || '',
         dob: req.body.dob || '',
+        createdDate: new Date().toISOString(),
         bio: req.body.bio || '',
         website: req.body.website || '',
         location: req.body.location || '',
@@ -65,6 +66,9 @@ app.post('/createPost', (req, res) => {
 app.get('/getUser', (req, res) => {
     db.collection('users').doc(req.query.email).get()
     .then((doc) => {
+        if(!doc.exists){
+            res.sendStatus(404);
+        }
         res.json(doc.data());
     });
 });

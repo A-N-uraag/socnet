@@ -77,12 +77,16 @@ const UserProfile = () => {
                                 <Row fluid="true" className="gx-0 gy-0 py-0 my-0">
                                     <Col fluid="true" className="py-0 my-0">
                                         <div className="centerAlign py-0 my-0">
-                                            <p style={{display: "inline-block"}} className="text-secondary">Followers: </p><p style={{display: "inline-block"}}>{user.followers ? user.followers.length : 0}</p>
+                                            <Button style={{margin:"3px 0px"}} variant="outline-dark" size="sm">
+                                                <p style={{fontSize:"12px",margin:"0px",display: "inline-block"}} className="text-secondary">Followers&nbsp;&nbsp;</p><p style={{fontSize:"12px",margin:"0px",fontWeight:"semibold",display: "inline-block"}}>{user.followers ? user.followers.length : 0}</p>
+                                            </Button>
                                         </div>
                                     </Col>
                                     <Col fluid="true" className="py-0 my-0">
                                         <div className="centerAlign py-0 my-0">
-                                            <p style={{display: "inline-block"}} className="text-secondary">Following: </p><p style={{display: "inline-block"}}>{user.followers ? user.following.length : 0}</p>
+                                            <Button style={{margin:"3px 0px"}} variant="outline-dark" size="sm">
+                                                <p style={{fontSize:"12px",margin:"0px",display: "inline-block"}} className="text-secondary">Following&nbsp;&nbsp;</p><p style={{fontSize:"12px",margin:"0px",fontWeight:"semibold",display: "inline-block"}}>{user.following ? user.following.length : 0}</p>
+                                            </Button>
                                         </div>
                                     </Col>
                                 </Row>
@@ -91,7 +95,7 @@ const UserProfile = () => {
                     </Card>
                 </Row>
                 <ClimbingBoxLoader color="#332FD0" size={20} css={override} loading={posts==="null"}/>
-                {Object.keys(posts).reverse().map((pid: string) => {   
+                {posts && Object.keys(posts).reverse().map((pid: string) => {   
                     const post:any = posts[pid];
                     return (
                         <Row key={pid} fluid="true" className="gx-0">
