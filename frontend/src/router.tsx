@@ -6,6 +6,9 @@ import CreateProfile from "./components/createProfile/createProfile";
 import AuthWrapper from "./requireAuth";
 import UserProfilePage from "./components/userPage/userPage";
 import ProfilePage from "./components/profilePage/profilePage";
+import UserListItem from "./components/userListComponent/userList";
+import ChatComponent from "./components/chatComponent/chatComponent";
+import ExploreComponent from "./components/exploreComponent/exploreComponent";
 
 class AppRouter extends React.Component {
     render() {
@@ -21,6 +24,15 @@ class AppRouter extends React.Component {
                     } />
                     <Route path="myprofile" element={
                         <AuthWrapper Component={<ProfilePage/>}/>
+                    } />
+                    <Route path="testUserList" element={
+                        <AuthWrapper Component={<UserListItem userIds={["mara@gmail.com", "tester@test.com"]}/>}/>
+                    } />
+                    <Route path="chat" element={
+                        <AuthWrapper Component={<ChatComponent/>}/>
+                    } />
+                    <Route path="explore" element={
+                        <AuthWrapper Component={<ExploreComponent/>}/>
                     } />
                     <Route path="user/:userId" element={<UserProfilePage />} />
                 </Routes>

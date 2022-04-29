@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faLink, faCakeCandles, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
-import { Card, Container, Row, Col, Button } from "react-bootstrap";
+import { Card, Container, Row, Col, Button, Modal } from "react-bootstrap";
 import Moment from "moment";
 import "./profilePage.css";
 import { useState, useEffect } from "react";
@@ -8,6 +8,7 @@ import Post from "../Post/Posts";
 import { auth } from "../../firebase/firebase";
 import { ClimbingBoxLoader } from "react-spinners";
 import NavComponent from "../navComponent/navComponent";
+import UserList from "../userListComponent/userList";
 
 const override = `
   display: block;
@@ -43,9 +44,40 @@ const ProfilePage = () => {
         });
     }, []);
 
+    const [show, setShow] = useState(false);
+    const [modalTitle, setModalTitle] = useState<string>("");
+    const [userIds, setUserIds] = useState<string[]>([]);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const handleFollowerShow = () => {
+        setModalTitle("Followers");
+        setUserIds(user.followers);
+        handleShow();
+    };
+
+    const handleFollowingShow = () => {
+        setModalTitle("Following");
+        setUserIds(user.following);
+        handleShow();
+    };
+
     return (
         <>
             <NavComponent />
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                <Modal.Title> {modalTitle} </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <UserList userIds={userIds}/>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             <Container fluid="true">
                 <Row fluid="true" className="gx-0">
                     <Col xs={0} md={3}></Col>
@@ -78,14 +110,14 @@ const ProfilePage = () => {
                                     <Row fluid="true" className="gx-0 gy-0 py-0 my-0">
                                         <Col fluid="true" className="py-0 my-0">
                                             <div className="centerAlign py-0 my-0">
-                                                <Button style={{margin:"3px 0px"}} variant="outline-dark" size="sm">
+                                                <Button style={{margin:"3px 0px"}} variant="outline-dark" size="sm" onClick={handleFollowerShow}>
                                                     <p style={{fontSize:"12px",margin:"0px",display: "inline-block"}} className="text-secondary">Followers&nbsp;&nbsp;</p><p style={{fontSize:"12px",margin:"0px",fontWeight:"semibold",display: "inline-block"}}>{user.followers ? user.followers.length : 0}</p>
                                                 </Button>
                                             </div>
                                         </Col>
                                         <Col fluid="true" className="py-0 my-0">
                                             <div className="centerAlign py-0 my-0">
-                                                <Button style={{margin:"3px 0px"}} variant="outline-dark" size="sm">
+                                                <Button style={{margin:"3px 0px"}} variant="outline-dark" size="sm" onClick={handleFollowingShow}>
                                                     <p style={{fontSize:"12px",margin:"0px",display: "inline-block"}} className="text-secondary">Following&nbsp;&nbsp;</p><p style={{fontSize:"12px",margin:"0px",fontWeight:"semibold",display: "inline-block"}}>{user.following ? user.following.length : 0}</p>
                                                 </Button>
                                             </div>
