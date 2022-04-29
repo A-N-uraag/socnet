@@ -84,6 +84,7 @@ app.post('/generateFeed', (req, res) => {
         }
     }).then((querySnapshot) => {
         const posts = {};
+        if(!querySnapshot.empty)
         querySnapshot.forEach((doc) => {
             posts[doc.id] = doc.data();
         });
