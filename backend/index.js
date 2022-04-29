@@ -74,6 +74,8 @@ app.post('/generateFeed', (req, res) => {
     db.collection('users').doc(userId).get().then((doc) => {
         if(doc.exists) {
             const following = doc.data().following;
+            if(following.length == 0)
+                following.push(userId);
             return db.collection('posts').where('postedBy', 'in', following).orderBy('createdDate', 'desc').limit(30).get();
         }
     }).then((querySnapshot) => {
