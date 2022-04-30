@@ -4,9 +4,34 @@ const cors = require('cors');
 const admin = require('./utils/admin');
 const db = admin.db;
 const app = express();
+const uploadImage = require('./utils/helper')
+const multer = require('multer')
+
+const multerFiles = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+      fileSize: 5 * 1024 * 1024,
+    },
+});
+
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+
+app.post('/upload', multerFiles.single('file'), async (req, res) => {
+    try {
+        const myFile = req.file
+        const imageUrl = await uploadImage(myFile)
+        res.status(200)
+        .json({
+            "message": "Upload was successful",
+            "url": imageUrl
+        })
+    }
+    catch (error) {
+        res.json({"error":error});
+    }
+});
 
 app.post('/createUser', (req, res) => {
     const newProfile = {
@@ -15,7 +40,7 @@ app.post('/createUser', (req, res) => {
         createdDate: new Date().toISOString(),
         bio: req.body.bio || '',
         website: req.body.website || '',
-        location: req.body.location || '',
+        location: req.body.location || 'Oasis',
         posts: [],
         likedPosts: [],
         followers: [],

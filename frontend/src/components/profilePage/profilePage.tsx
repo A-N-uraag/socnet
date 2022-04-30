@@ -108,8 +108,7 @@ const ProfilePage = () => {
                             .then(([status,response]) => {
                                 console.log(response);
                                 if (status === 200) {
-                                    alert("Success");
-                                    // navigate('/home');
+                                    window.location.reload();
                                 }
                                 else{
                                     console.log("Error");
@@ -176,7 +175,7 @@ const ProfilePage = () => {
                                 <Container fluid="true">
                                     <Row fluid="true" className="gx-0">
                                         <Col fluid="true" sm={3}>
-                                            <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faLocationDot} /> <p style={{display: "inline-block"}}>{user.location ? user.location : "Zombieland"}</p>
+                                            <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faLocationDot} /> <p style={{display: "inline-block"}}>{user.location ? user.location : "Oasis"}</p>
                                         </Col>
                                         <Col fluid="true" sm={3}>
                                             <FontAwesomeIcon size="xs" style={{display: "inline-block"}} icon={faLink} /> <a href={user.website ? user.website : "https://google.co.in"} style={{display: "inline-block", color: "#332FD0"}}>Website</a>

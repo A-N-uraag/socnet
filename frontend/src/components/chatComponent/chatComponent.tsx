@@ -1,21 +1,19 @@
-import { Container, Row, Col } from "react-bootstrap";
 import NavComponent from "../navComponent/navComponent";
 import "./chatComponent.css";
+import { App as SendbirdApp } from 'sendbird-uikit';
+import "sendbird-uikit/dist/index.css";
+import { auth } from "../../firebase/firebase";
 
 const ChatComponent = () => {
     return (
-        <>
-            <NavComponent />
-            <Container fluid="true">
-                <Row fluid="true" className="gx-0">
-                    <Col xs={0} md={3}></Col>
-                    <Col fluid="true" xs={12} md={6}>
-                        <h1>Coming Soon</h1>
-                    </Col>
-                    <Col xs={0} md={3}></Col>
-                </Row>
-            </Container>
-        </>
+        <div>
+            <div className="navcomp">
+                <NavComponent/>
+            </div>
+            <div className="chatcomp">
+                <SendbirdApp appId="BDFDFFE0-72A7-4552-8533-3730EAC39259" userId={auth.currentUser?.email || "demo-user"} />
+            </div>
+        </div>
     );
 };
 

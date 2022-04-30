@@ -1,3 +1,21 @@
-h1 {
-    text-align: center;
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+.navcomp {
+    height: 10%;
+}
+
+.sendbird-message-content__middle__message-item-body {
+    font-size: 14px;
+}
+
+.chatcomp {
+    height: 93.25%;
+    width: 100%;
+    margin: auto;
+    position: absolute;
+    overflow: clip;
 }

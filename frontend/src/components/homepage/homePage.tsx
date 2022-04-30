@@ -7,10 +7,10 @@ const Homepage = () => {
     return(
         <>
             <NavComponent />
-            <Container className="mt-3 justify-content-center" fluid>
-                <Row fluid>
+            <Container className="mt-3 justify-content-center" fluid="true">
+                <Row fluid="true">
                     <Col xs={0} md={3}></Col>
-                    <Col fluid xs={12} md={6}>
+                    <Col fluid="true" xs={12} md={6}>
                         <FeedComponent />
                     </Col>
                     <Col xs={0} md={3}></Col>

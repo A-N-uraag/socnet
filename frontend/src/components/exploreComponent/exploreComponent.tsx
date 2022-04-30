@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import UserList from "../userListComponent/userList";
 import { auth } from "../../firebase/firebase";
+import NavComponent from "../navComponent/navComponent";
 
 const ExploreComponent = () => {
     const [allUsers, setAllUsers] = useState<any>({});
@@ -22,6 +23,7 @@ const ExploreComponent = () => {
     
     return (
         <>
+            <NavComponent />
             <Container fluid="true">
                 <Row fluid="true">
                     <Col md={{ span: 4, offset: 4 }}>

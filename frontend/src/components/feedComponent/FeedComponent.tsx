@@ -13,6 +13,7 @@ const override = `
 const FeedComponent = () => {
     const [postText, setPostText] = useState<string>("");
     const [posts, setPosts] = useState<any>("null");
+    const [postMedia, setPostMedia] = useState<any>("null");
     
     useEffect(() => {
         const requestOptions = {
@@ -29,9 +30,51 @@ const FeedComponent = () => {
         });
     }, []);
 
-    const onPostCaptionWrite = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPostText(event.target.value);
+    const onPostCaptionWrite = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPostText(e.target.value);
     }
+    const onFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPostMedia(e.target.files ? e.target.files[0] : "null");
+    }
+
+    const submitPost = () => {
+        var formdata = new FormData();
+        formdata.append("file", postMedia, postMedia.name);
+
+        var requestOptions:any = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            body: formdata
+        };
+
+        fetch("https://socnet-swe.herokuapp.com/upload", requestOptions)
+        .then(response => response.json())
+        .then(uploadResp => {
+            requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: auth.currentUser?.email,
+                    content: postText,
+                    media: uploadResp.url
+                })
+            };
+            return fetch('https://socnet-swe.herokuapp.com/createPost', requestOptions)
+        })
+        .then(response => Promise.all([response.status,response.json()]))
+        .then(([status,response]) => {
+            if(status === 200){
+                window.location.reload();
+            }
+            console.log(response);
+        })
+        .catch(error => console.log('error', error));
+    }
+
     return (
         <>
             <Container fluid="true">
@@ -49,31 +92,14 @@ const FeedComponent = () => {
                                     <Col fluid="true">
                                         <Form onSubmit={(e)=>{
                                             e.preventDefault();
-                                            const requestOptions = {
-                                                method: 'POST',
-                                                headers: {
-                                                    'Content-Type': 'application/json'
-                                                },
-                                                body: JSON.stringify({
-                                                    email: auth.currentUser?.email,
-                                                    content: postText
-                                                })
-                                            };
-                                            fetch('https://socnet-swe.herokuapp.com/createPost', requestOptions)
-                                            .then(response => Promise.all([response.status,response.json()]))
-                                            .then(([status,response]) => {
-                                                if(status === 200){
-                                                    window.location.reload();
-                                                }
-                                                console.log(response);
-                                            });
+                                            submitPost();
                                         }}>
                                             <Form.Group controlId="postWriting">
                                                 <Form.Control className="border-0" value={postText} onChange={onPostCaptionWrite} as="textarea" rows={3} placeholder="What's happening?"/>
                                             </Form.Group>
                                             <Row className="mt-2">
                                                 <Form.Group as={Col} controlId="imageUpload">
-                                                    <Form.Control className="justify-content-end" type="file" />
+                                                    <Form.Control className="justify-content-end" onChange={onFileUpload} size="sm" type="file" />
                                                 </Form.Group>
                                                 <Col>
                                                     <Button variant="primary" type="submit"> Post </Button>
