@@ -136,7 +136,7 @@ app.post('/generateFeed', (req, res) => {
         }
     }).then((querySnapshot) => {
         const posts = {};
-        if(!querySnapshot.empty)
+        if(querySnapshot && !querySnapshot.empty)
         querySnapshot.forEach((doc) => {
             posts[doc.id] = doc.data();
         });
@@ -147,9 +147,11 @@ app.post('/generateFeed', (req, res) => {
 app.get('/getAllUsers', (req, res) => {
     db.collection('users').get().then((querySnapshot) => {
         const users = {};
-        querySnapshot.forEach((doc) => {
-            users[doc.id] = doc.data().uname;
-        });
+        if(querySnapshot) {
+            querySnapshot.forEach((doc) => {
+                users[doc.id] = doc.data().uname;
+            });
+        }
         res.json(users);
     });
 });
