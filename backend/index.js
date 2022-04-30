@@ -95,9 +95,9 @@ app.post('/generateFeed', (req, res) => {
 //get all document ids of users collection
 app.get('/getAllUsers', (req, res) => {
     db.collection('users').get().then((querySnapshot) => {
-        const users = [];
+        const users = {};
         querySnapshot.forEach((doc) => {
-            users.push(doc.id);
+            users[doc.id] = doc.data().uname;
         });
         res.json(users);
     });
