@@ -67,7 +67,7 @@ app.get('/getUser', (req, res) => {
     db.collection('users').doc(req.query.email).get()
     .then((doc) => {
         if(!doc.exists){
-            res.status(404).json({ error: 'user does not exist' });
+            res.status(404).json({ "error": 'user does not exist' });
         }
         res.json(doc.data());
     });
@@ -89,6 +89,17 @@ app.post('/generateFeed', (req, res) => {
             posts[doc.id] = doc.data();
         });
         res.json(posts);
+    });
+});
+
+//get all document ids of users collection
+app.get('/getAllUsers', (req, res) => {
+    db.collection('users').get().then((querySnapshot) => {
+        const users = [];
+        querySnapshot.forEach((doc) => {
+            users.push(doc.id);
+        });
+        res.json(users);
     });
 });
 
