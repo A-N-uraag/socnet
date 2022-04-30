@@ -11,6 +11,7 @@ const Post = (props: any) => {
     const [likeClicked, setLikeClicked] = useState<boolean>(props.likes ? props.likes.includes(auth.currentUser?.email) : false);
     const [likes, setLikes] = useState<number>(props.likes ? props.likes.length : 0);
     const [show, setShow] = useState<boolean>(false);
+    const [showImage, setShowImage] = useState<boolean>(false);
     const [comment, setComment] = useState<string>("");
     const commented:any = props.comments ? props.comments.some((comment: any) => comment.uid === props.uid) : false;
     const onLikeClick = () => {
@@ -41,6 +42,9 @@ const Post = (props: any) => {
     const handleClose = () => {
         setShow(false);
     };
+    const handleImageClose = () => {
+        setShowImage(false);
+    };
     const onCommentClick = () => {
         setShow(true);
     };
@@ -68,9 +72,26 @@ const Post = (props: any) => {
                 </Card.Text>
                 {props.media==="null" && <Image
                     style={{width: "40%", margin:"2px 35%"}}
+                    onClick={() => setShowImage(true)}
                     src={props.media}
                     fluid={true}
                 />}
+                <Modal show={showImage} onHide={handleImageClose}>
+                            <Modal.Header closeButton>
+                            <Modal.Title>Media</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                            <Image
+                                src={props.media}
+                                fluid={true}
+                            />
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={handleSubmit}>
+                                Close
+                            </Button>
+                            </Modal.Footer>
+                        </Modal>
             </Card.Body>
             <Card.Footer className="py-0 my-0">
                 <Row fluid="true">
