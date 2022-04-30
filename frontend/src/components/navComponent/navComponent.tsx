@@ -23,7 +23,7 @@ const NavComponent = () => {
                             auth.signOut();
                         }}
                 > 
-                    Signout 
+                    Sign Out 
                 </Button> : null}
                 </Navbar.Collapse>
             </Container>
