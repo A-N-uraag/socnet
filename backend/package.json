@@ -1,7 +1,4 @@
 {
-  "devDependencies": {
-    "nodemon": "^2.0.15"
-  },
   "dependencies": {
     "axios": "^0.27.2",
     "cors": "^2.8.5",
@@ -10,7 +7,8 @@
     "firebase": "^9.6.11",
     "firebase-admin": "^10.1.0",
     "multer": "^1.4.4",
-    "util": "^0.12.4"
+    "util": "^0.12.4",
+    "nodemon": "^2.0.16"
   },
   "scripts": {
     "start": "nodemon -x 'node index.js || (sleep 5; touch index.js)'",
