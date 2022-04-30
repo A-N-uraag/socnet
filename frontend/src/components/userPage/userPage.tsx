@@ -178,7 +178,7 @@ const UserProfilePage = () => {
                             <Row key={pid} fluid="true" className="gx-0">
                                 <Col xs={0} md={3}></Col>
                                 <Col fluid xs={12} md={6}>
-                                    <Post content={post.content} uname={post.postedByName} likes={post.likes} comments={post.comments} reposts={post.reposts} pid={pid} fid={post.postedBy} uid={auth.currentUser?.uid}createdDate={post.createdDate} />
+                                    <Post content={post.content} uname={post.postedByName} media={post.media} likes={post.likes} comments={post.comments} reposts={post.reposts} pid={pid} fid={post.postedBy} uid={auth.currentUser?.uid}createdDate={post.createdDate} />
                                 </Col>
                                 <Col xs={0} md={3}></Col>
                             </Row>

@@ -69,7 +69,8 @@ app.post('/createPost', (req, res) => {
             reposts: 0,
             noOfReports: 0,
             postedBy: req.body.email || '',
-            postedByName: userName || ''
+            postedByName: userName || '',
+            media: req.body.media || 'null'
         };
         var docId;
         db.collection('posts').add(newPost)

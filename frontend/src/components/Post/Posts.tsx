@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faDotCircle, faComment, faRetweet, faShare} from "@fortawesome/free-solid-svg-icons";
 import {faHeart as faRHeart, faComment as faRComment } from "@fortawesome/free-regular-svg-icons";
 import Moment from "moment";
-import { Card, Row, Col, Modal, Button, Form } from "react-bootstrap"; 
+import { Card, Row, Col, Modal, Button, Form, Image } from "react-bootstrap"; 
 import { useState } from "react";
 import { auth } from "../../firebase/firebase";
 
@@ -63,9 +63,14 @@ const Post = (props: any) => {
                     <FontAwesomeIcon key="delimiter" className={"mx-2"}  size="xs" style={{display: "inline-block"}} icon={faDotCircle} /> 
                     <p className="text-secondary" style={{display: "inline-block", color: "secondary"}}> {Moment(props.createdDate).format('LL')} </p>
                 </Card.Subtitle>
-                <Card.Text className="">
+                <Card.Text style={{fontSize:"15px"}}>
                     {props.content}
                 </Card.Text>
+                {props.media && <Image
+                    style={{width: "30%", margin:"2px 35%"}}
+                    src={props.media}
+                    fluid={true}
+                />}
             </Card.Body>
             <Card.Footer className="py-0 my-0">
                 <Row fluid="true">

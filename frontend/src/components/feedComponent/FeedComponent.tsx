@@ -43,9 +43,6 @@ const FeedComponent = () => {
 
         var requestOptions:any = {
             method: 'POST',
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            },
             body: formdata
         };
 
@@ -63,6 +60,7 @@ const FeedComponent = () => {
                     media: uploadResp.url
                 })
             };
+            console.log(requestOptions.body);
             return fetch('https://socnet-swe.herokuapp.com/createPost', requestOptions)
         })
         .then(response => Promise.all([response.status,response.json()]))
@@ -117,7 +115,7 @@ const FeedComponent = () => {
                     const post:any = posts[pid];
                     return (
                         <Row key={pid} fluid="true" className="gx-0">
-                            <Post content={post.content} uname={post.postedByName} likes={post.likes} comments={post.comments} reposts={post.reposts} pid={pid} fid={post.postedBy} uid={auth.currentUser?.uid}createdDate={post.createdDate} />
+                            <Post content={post.content} uname={post.postedByName} media={post.media} likes={post.likes} comments={post.comments} reposts={post.reposts} pid={pid} fid={post.postedBy} uid={auth.currentUser?.uid}createdDate={post.createdDate} />
                         </Row>
                     );
                 })}
