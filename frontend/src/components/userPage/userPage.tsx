@@ -55,14 +55,34 @@ const UserProfilePage = () => {
 
     const handleFollowerShow = () => {
         setModalTitle("Followers");
-        setUserIds(user.followers);
-        handleShow();
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ "userIds":user.followers })
+        };
+        fetch('https://socnet-swe.herokuapp.com/getUnames', requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            setUserIds(data);
+            handleShow();
+        })
+        .catch(error => console.log(error));
     };
 
     const handleFollowingShow = () => {
         setModalTitle("Following");
-        setUserIds(user.following);
-        handleShow();
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ "userIds":user.following })
+        };
+        fetch('https://socnet-swe.herokuapp.com/getUnames', requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            setUserIds(data);
+            handleShow();
+        })
+        .catch(error => console.log(error));
     };
 
     useEffect(() => {
