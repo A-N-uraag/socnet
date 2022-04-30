@@ -57,9 +57,9 @@ const Post = (props: any) => {
         <Card className="my-1">
             <Card.Body>
                 <Card.Subtitle> 
-                    <p style={{display: "inline-block"}}> 
+                    <a href={props.fid ? "user/"+props.fid : "#"} style={{display: "inline-block"}}> 
                         {props.uname}
-                    </p>
+                    </a>
                     <FontAwesomeIcon key="delimiter" className={"mx-2"}  size="xs" style={{display: "inline-block"}} icon={faDotCircle} /> 
                     <p className="text-secondary" style={{display: "inline-block", color: "secondary"}}> {Moment(props.createdDate).format('LL')} </p>
                 </Card.Subtitle>
