@@ -70,7 +70,7 @@ const Post = (props: any) => {
                 <Card.Text style={{fontSize:"15px"}}>
                     {props.content}
                 </Card.Text>
-                {props.media==="null" && <Image
+                {props.media!=="null" && <Image
                     style={{width: "40%", margin:"2px 35%"}}
                     onClick={() => setShowImage(true)}
                     src={props.media}
