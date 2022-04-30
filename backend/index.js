@@ -20,8 +20,11 @@ app.use(bodyParser.json());
 
 app.post('/upload', multerFiles.single('file'), async (req, res) => {
     try {
-        const myFile = req.file
-        const imageUrl = await uploadImage(myFile)
+        const nullObj = {value: "null"};
+        const nullBlob = new Blob([JSON.stringify(nullObj, null, 2)], {type : 'application/json'});
+        var imageUrl = "null";
+        if(req.file === nullBlob)
+            imageUrl = await uploadImage(req.file);
         res.status(200)
         .json({
             "message": "Upload was successful",

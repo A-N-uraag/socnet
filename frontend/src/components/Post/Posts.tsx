@@ -66,8 +66,8 @@ const Post = (props: any) => {
                 <Card.Text style={{fontSize:"15px"}}>
                     {props.content}
                 </Card.Text>
-                {props.media && <Image
-                    style={{width: "30%", margin:"2px 35%"}}
+                {props.media==="null" && <Image
+                    style={{width: "40%", margin:"2px 35%"}}
                     src={props.media}
                     fluid={true}
                 />}

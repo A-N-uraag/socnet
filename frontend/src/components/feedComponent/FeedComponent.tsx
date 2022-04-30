@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Card, Col, Container, Row, Image, Form, Button } from "react-bootstrap";
 import Post from "../Post/Posts";
 import { auth } from "../../firebase/firebase";
-import { ClimbingBoxLoader } from "react-spinners";
+import { ClimbingBoxLoader, PacmanLoader } from "react-spinners";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const override = `
   display: block;
@@ -11,9 +13,13 @@ const override = `
 `;
 
 const FeedComponent = () => {
+    const nullObj = {value: "null"};
+    const nullBlob = new Blob([JSON.stringify(nullObj, null, 2)], {type : 'application/json'});
+
     const [postText, setPostText] = useState<string>("");
     const [posts, setPosts] = useState<any>("null");
-    const [postMedia, setPostMedia] = useState<any>("null");
+    const [postMedia, setPostMedia] = useState<any>(nullBlob);
+    const [posting, setPosting] = useState<boolean>(false);
     
     useEffect(() => {
         const requestOptions = {
@@ -34,10 +40,12 @@ const FeedComponent = () => {
         setPostText(e.target.value);
     }
     const onFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPostMedia(e.target.files ? e.target.files[0] : "null");
+        setPostMedia(e.target.files ? e.target.files[0] : nullBlob);
     }
 
     const submitPost = () => {
+        setPosting(true);
+
         var formdata = new FormData();
         formdata.append("file", postMedia, postMedia.name);
 
@@ -93,14 +101,23 @@ const FeedComponent = () => {
                                             submitPost();
                                         }}>
                                             <Form.Group controlId="postWriting">
-                                                <Form.Control className="border-0" value={postText} onChange={onPostCaptionWrite} as="textarea" rows={3} placeholder="What's happening?"/>
+                                                <Form.Control required className="border-0" value={postText} onChange={onPostCaptionWrite} as="textarea" rows={3} placeholder="What's happening?"/>
                                             </Form.Group>
                                             <Row className="mt-2">
                                                 <Form.Group as={Col} controlId="imageUpload">
                                                     <Form.Control className="justify-content-end" onChange={onFileUpload} size="sm" type="file" />
                                                 </Form.Group>
                                                 <Col>
-                                                    <Button variant="primary" type="submit"> Post </Button>
+                                                    <Button color="#332fd0" variant="primary" type="submit" size="sm">
+                                                        {posting
+                                                        ? <FontAwesomeIcon icon={faSpinner} color="white" />
+                                                        : <FontAwesomeIcon icon={faPaperPlane} color="white" />
+                                                        }
+                                                        {posting
+                                                        ? " Posting..."
+                                                        : " Post"
+                                                        }
+                                                    </Button>
                                                 </Col>
                                             </Row>
                                         </Form>
