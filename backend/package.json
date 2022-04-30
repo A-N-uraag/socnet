@@ -13,7 +13,7 @@
     "util": "^0.12.4"
   },
   "scripts": {
-    "start": "node index.js",
-    "run": "node index.js"
+    "start": "nodemon -x 'node index.js || (sleep 5; touch index.js)'",
+    "run": "nodemon -x 'node index.js || (sleep 5; touch index.js)'"
   }
 }

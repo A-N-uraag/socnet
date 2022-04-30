@@ -56,6 +56,17 @@ app.post('/createUser', (req, res) => {
     });
 });
 
+app.post('/getUnames', async (req, res) => {
+    const userIds = req.body.userIds || [];
+    resp = {};
+    await Promise.all(userIds.map(async (userId) => {
+
+        const user = await db.collection('users').doc(userId).get();
+        resp[userId] = user.data().uname;
+    }));
+    res.json(resp);
+});
+
 app.post('/createPost', (req, res) => {
     var userName;
     db.collection('users').doc(req.body.email).get()
@@ -118,7 +129,6 @@ app.post('/generateFeed', (req, res) => {
     });
 });
 
-//get all document ids of users collection
 app.get('/getAllUsers', (req, res) => {
     db.collection('users').get().then((querySnapshot) => {
         const users = {};

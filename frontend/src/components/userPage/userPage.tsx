@@ -101,7 +101,7 @@ const UserProfilePage = () => {
                     <Modal.Title> {modalTitle} </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <UserList userIds={userIds}/>
+                        <UserList allUsers={userIds} user={user}/>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>
@@ -112,7 +112,7 @@ const UserProfilePage = () => {
                 <Container fluid="true">
                     <Row fluid="true" className="gx-0">
                         <Col xs={0} md={3}></Col>
-                        <Col fluid xs={12} md={6}>
+                        <Col fluid="true" xs={12} md={6}>
                             <Card>
                                 <Card.Img variant="top" style={imgLoaded ? {width:"30%",margin:"0px auto"} : {display: 'none'}} src={"https://avatars.dicebear.com/api/bottts/"+userId+".svg?colorful=1"}  onLoad={() => setImgLoaded(true)} />
                                 <Card.Body>
@@ -177,7 +177,7 @@ const UserProfilePage = () => {
                         return (
                             <Row key={pid} fluid="true" className="gx-0">
                                 <Col xs={0} md={3}></Col>
-                                <Col fluid xs={12} md={6}>
+                                <Col fluid="true" xs={12} md={6}>
                                     <Post content={post.content} uname={post.postedByName} media={post.media} likes={post.likes} comments={post.comments} reposts={post.reposts} pid={pid} fid={post.postedBy} uid={auth.currentUser?.uid}createdDate={post.createdDate} />
                                 </Col>
                                 <Col xs={0} md={3}></Col>

@@ -56,14 +56,34 @@ const ProfilePage = () => {
 
     const handleFollowerShow = () => {
         setModalTitle("Followers");
-        setUserIds(user.followers);
-        handleShow();
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ "userIds":user.followers })
+        };
+        fetch('https://socnet-swe.herokuapp.com/getUnames', requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            setUserIds(data);
+            handleShow();
+        })
+        .catch(error => console.log(error));
     };
 
     const handleFollowingShow = () => {
         setModalTitle("Following");
-        setUserIds(user.following);
-        handleShow();
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ "userIds":user.following })
+        };
+        fetch('https://socnet-swe.herokuapp.com/getUnames', requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            setUserIds(data);
+            handleShow();
+        })
+        .catch(error => console.log(error));
     };
 
     const userEmail = auth.currentUser?.email;
@@ -81,7 +101,7 @@ const ProfilePage = () => {
                 <Modal.Title> {modalTitle} </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <UserList userIds={userIds}/>
+                <UserList allUsers={userIds} user={user}/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
@@ -166,7 +186,7 @@ const ProfilePage = () => {
             <Container fluid="true">
                 <Row fluid="true" className="gx-0">
                     <Col xs={0} md={3}></Col>
-                    <Col fluid xs={12} md={6}>
+                    <Col fluid="true" xs={12} md={6}>
                         <Card>
                             <Card.Img variant="top" style={imgLoaded ? {width:"30%",margin:"0px auto"} : {display: 'none'}} src={"https://avatars.dicebear.com/api/bottts/"+auth.currentUser?.email+".svg?colorful=1"}  onLoad={() => setImgLoaded(true)} />
                             <Card.Body>
@@ -221,7 +241,7 @@ const ProfilePage = () => {
                     return (
                         <Row key={pid} fluid="true" className="gx-0">
                             <Col xs={0} md={3}></Col>
-                            <Col fluid xs={12} md={6}>
+                            <Col fluid="true" xs={12} md={6}>
                                 <Post content={post.content} uname={post.postedByName} media={post.media} likes={post.likes} comments={post.comments} reposts={post.reposts} pid={pid} fid={post.postedBy} uid={auth.currentUser?.uid}createdDate={post.createdDate} />
                             </Col>
                             <Col xs={0} md={3}></Col>
