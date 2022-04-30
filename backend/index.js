@@ -61,7 +61,6 @@ app.post('/createUser', (req, res) => {
             "profile_url": "https://avatars.dicebear.com/api/bottts/"+req.body.email+".svg?colorful=1",
         })
     }
-    fetch("https://api-BDFDFFE0-72A7-4552-8533-3730EAC39259.sendbird.com/v3/users", requestOptions);
     db.collection('users').doc(req.body.email).set(newProfile).then((doc) => {
         res.json({
             "message": `user ${req.body.email} created successfully`
