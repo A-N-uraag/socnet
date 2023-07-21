@@ -6,18 +6,15 @@ name: Deploy to Firebase Hosting on merge
   push:
     branches:
       - main
-    paths:
-      - frontend/**
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: cd frontend && npm ci && CI=false npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SOCNET_SWE }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_OASIS_4FEC2 }}'
           channelId: live
-          projectId: socnet-swe
-          entryPoint: "./frontend" 
+          projectId: oasis-4fec2
